@@ -19,7 +19,7 @@ Lazing灵感来自lazyload、苹果官网效果，
 ====
 
 | arguments   | 作用  | 默认值 | 类型   | 
-| :------- | ----: | :---: |
+| ------- | :----: | :---: | ---: |
 | name  |  支持jQueryDOM查询命名规则  | .lazy |  string    |
 | time   | 执行时间 | 1000   |  num  |
 | delay   | 延迟加载时间 | 未支持   |  ...  |
@@ -70,7 +70,7 @@ Lazing灵感来自lazyload、苹果官网效果，
 
 ------------
 
-[![](http://www.ad-cn.net/photo/85211406170613.jpg =100x100 '搜狐视频')](http://tv.sohu.com/)
+[![](http://www.ad-cn.net/photo/85211406170613.jpg '搜狐视频')](http://tv.sohu.com/)
 
 ------------
 
