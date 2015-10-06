@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+        <meta charset="UTF-8">
+        <script src="jquery.min.js"></script>
+        <script src="lazing.js"></script>
+	</head>
+	<body>
+        <span>阿门：</span>
+        <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
+        <span class="lazy2" style="">hello world2</span>
+        <span class="lazy" style="color: red;">hello world-111</span>
+		<div style="position: relative;height: 3000px;">
+			<div id="div" style='position: absolute; top: 1500px; left: 0; width: 50px; height: 50px; background-color: red;'></div>
+		</div>
+	</body>
+</html>
+
+<script>    
+    lazy.init([
+        {
+            name: '.lazy1',//作用对象
+            time: 1000,//执行时间
+            delay: 0,//延迟时间
+            offset: '200',//偏移量
+            orien: 'top',//方向
+            lazy: true,//是否支持赖加载
+            repe: true,//是否支持重复
+            easing: 'swing'
+        },
+        {
+            name: '.lazy2',//作用对象
+
+        },
+        {
+            name: '.lazy'
+        },
+        {
+            name: '#div',
+            lazy: true,
+            repe: true
+        }
+    ]);        
+</script>
