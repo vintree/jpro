@@ -37,12 +37,21 @@ gulp.task('css', function () {
 
 // js处理
 gulp.task('js', function () {
-    var jsSrc = './src/js/**/*.js',
-        jsDst ='./dist/js';
+    var jsSrc = './src/js/src/**/*.js',
+        jsDst ='./dist/js/src',
+        bsSrc = './src/js/**/*.js',
+        bsDst = './dist/js';
+    
+    gulp.src(bsSrc)
+        .pipe(gulp.dest(bsDst));
+    
     gulp.src(jsSrc)
         .pipe(jshint('.jshintrc'))
         .pipe(jshint.reporter('default'))
+        .pipe(rename({ suffix: '.min' }))
+        .pipe(uglify())
         .pipe(gulp.dest(jsDst));
+    
 });
 
 // 清空图片、样式、js
@@ -80,7 +89,7 @@ gulp.task('watch', function() {
         });
 
         // 监听js
-        gulp.watch('./src/js/*.js', function(){
+        gulp.watch('./src/js/src/*.js', function(){
             gulp.run('js');
         });
 

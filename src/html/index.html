@@ -2,9 +2,8 @@
 <html>
 	<head>
         <meta charset="UTF-8">
-        <script src="../js/jquery.min.js"></script>
-        <script src="http://cdn.bootcss.com/jquery-easing/1.3/jquery.easing.min.js"></script>
-        <script src="../js/lazing.min.js"></script>
+        <script src="../js/lib/jquery.min.js"></script>
+        <script src="../js/src/lazing.js"></script>
 	</head>
 	<body>
         <span>阿门：</span>
@@ -18,16 +17,22 @@
 </html>
 
 <script>    
+    
+//    $('.lazy1').animate({
+//       'left': '100' 
+//    }, 2000, function() {
+//        alert('asd');
+//    });
+    
     lazy.init([
         {
             name: '.lazy1',//作用对象
-            time: 3000,//执行时间
+            time: 1000,//执行时间
             delay: 0,//延迟时间
-            offset: '2000',//偏移量
+            offset: '100',//偏移量
             orien: 'top',//方向
             lazy: true,//是否支持赖加载
             repe: true,//是否支持重复
-            easing: 'swing'
         },
         {
             name: '.lazy2',//作用对象
