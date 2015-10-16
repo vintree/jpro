@@ -3,6 +3,7 @@
 	<head>
         <meta charset="UTF-8">
         <script src="../js/lib/jquery.min.js"></script>
+        <script src="../js/lib/jquery.transit.min.js"></script>
         <script src="../js/src/lazing.js"></script>
 	</head>
 	<body>
@@ -16,14 +17,7 @@
 	</body>
 </html>
 
-<script>    
-    
-//    $('.lazy1').animate({
-//       'left': '100' 
-//    }, 2000, function() {
-//        alert('asd');
-//    });
-    
+<script>
     lazy.init([
         {
             name: '.lazy1',//作用对象
@@ -33,9 +27,11 @@
             orien: 'top',//方向
             lazy: true,//是否支持赖加载
             repe: true,//是否支持重复
+            startOpacity: 0,//起始隐藏
+            endOpacity: 1//结束隐藏
         },
         {
-            name: '.lazy2',//作用对象
+            name: '.lazy2'
 
         },
         {
@@ -46,5 +42,5 @@
             lazy: true,
             repe: true
         }
-    ]);   
+    ]);
 </script>

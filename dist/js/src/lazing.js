@@ -1,6 +1,6 @@
 /**
-    2015-10-05
-    lazing V 0.1
+    2015-10-16
+    lazing V 0.2
     wuguzix@foxmail.com
 */
 ;(function($, g) {
@@ -13,19 +13,27 @@
             offset: '20',//偏移量
             orien: 'left',//方向
             lazy: false,//是否支持赖加载
+            action: false,//是否支持缓动
+            startOpacity: 0,//默认起始隐藏
+            endOpacity: 1,//默认结束隐藏
+            
             repe: false,//是否支持重复
             view: false,//是否在视口
-            action: false//是否支持缓动
+            ani: 0//没有进行动画  0-空闲，1-启动，2-进行中
         },
         config: [],//不支持懒加载
-        lazyconfig: [],//支持懒加载
+        lazyConfig: [],//支持懒加载
         setConfig: function() {//分配数据类型
             var i = 0,
                 l = arguments[0].length,
                 o = null,
-                t = {};
-            for(; i < l; i++) {
-                for(o in this.lets) {
+                t = {},
+                tag = null,
+                dom = null,
+                arr = [];
+            for(; i < l; i++) {//扫描对象
+                tag = this.random(4);
+                for(o in this.lets) {//扫描属性
                     if(arguments[0][i].hasOwnProperty(o)) {
                         t[o] = arguments[0][i][o] || this.lets[o];
                     }
@@ -33,12 +41,27 @@
                         t[o] = this.lets[o];
                     }
                 }
+                t.dom = $(t.name);                
                 if(t.lazy) {
-                    this.lazyconfig.push(t);
-                    this.register[t.name] = {
-                        view: t.view,
-                        repe: t.repe
-                    };
+                    dom = $(t.name);
+                    for(var di = 0, dl = dom.length; di < dl; di++) {//分离一个class对应多个DOM
+                        var temp = {};
+                        for(var s in t) {
+                            temp[s] = t[s];
+                        }
+                        tag = this.random(4);
+                        temp.tag = tag;
+                        temp.dom = dom.eq(di);
+                        arr.push(temp);
+                        this.lazyConfig.push(temp);
+                        this.register[tag] = {
+                            name: temp.name,
+                            view: temp.view,
+                            repe: temp.repe,
+                            ani: temp.ani,
+                            dom: temp.dom
+                        };
+                    }
                 }
                 else {
                     this.config.push(t);
@@ -47,14 +70,16 @@
             }
         },
         hide: function() {//初始化隐藏
-            var l = arguments[0].length,
-                i = 0;
+            var arr = arguments[0] || this.config.concat(this.lazyConfig),
+                l = arr.length,
+                i = 0;            
             for(; i < l; i++) {
-                $(arguments[0][i].name).css('opacity', 0);
+                $(arr[i].name).css('opacity', arr[i].startOpacity);
             }
         },
         working: function() {//效果工厂       
-            var dom = null, //DOM对象
+            var parentThis = this,
+                dom = null, //DOM对象
                 to = null, //临时对象
                 cl = arguments[0].length, //config长度
                 i = 0,//下标
@@ -63,19 +88,17 @@
                 is = null,//初始的style
                 tis = null;//真是的style
             for(; i < cl; i++) {
+                to = arguments[0][i];
                 s = {};
                 ts = {};
                 is = {};
                 tis = {};
-                to = arguments[0][i];
-                dom = $(to.name);
+                dom = to.dom;
                 s = dom.attr('style');
                 //TODO 没有设置position的orien无效
                 is['position'] = dom.css('position') === 'static' ? 'relative' : dom.css('position');
-//                is['opacity'] = dom.css('opacity');
-                is['opacity'] = 1;
+                is['opacity'] = to.endOpacity;
                 is[to.orien] = dom.css(to.orien) === 'auto' ? '0' : dom.css(to.orien);                
-//                [200, 'easeOutBounce']
                 //TODO 根据DOM初始量进行改进
                 ts = {
                     position: is['position']
@@ -84,69 +107,84 @@
                 ts[to.orien] = parseInt(to.offset, 10) + parseInt(is[to.orien], 10) + 'px';
                 dom.css(ts);
                 dom.show();
-                
-                dom.animate(is, to.time, function() {
-//                    s === undefined ? dom.removeAttr('style') : dom.attr('style', s); 
+                dom.stop(true, false).animate(is, to.time, function() {
+                    if(to.lazy) {
+                        parentThis.register[to.tag].ani = 0;
+                    }
                 });
             }
-            this.lazy();
         },
-        
         unlazy: function() {//不需要懒加载
             this.working(this.config);
         },
-        
-        lazy: function() {//需要懒加载            
+        lazy: function() {//需要懒加载
             var parentThis = this,
-                c = parentThis.lazyconfig,
+                c = parentThis.lazyConfig,
                 l = c.length,
                 i = 0,
-                t = null,           
-                viewH = $(window).height(),//窗口高度
+                t = null, 
+            viewH = $(window).height(),//窗口高度
 //                viewW = $(window).width(),//窗口宽度
-                viewT = $(window).scrollTop(),
+            viewT = $(window).scrollTop(),
 //                viewL = $(window).scrollLeft(),
-                clienH = null,
-                clienW = null,
-                clienT = null,
-                clienL = null;
-//                console.log("window: ", viewH, viewW, viewT, viewL);
-                for(; i < l ; i++ ) {
-                    t = c[i];
-                    clienH = $(t.name).height();
-                    clienW = $(t.name).width();
-                    clienT = $(t.name).scrollTop() || $(t.name)[0].offsetTop;
-                    clienL = $(t.name).scrollLeft() || $(t.name)[0].offsetLeft;
-//                    console.log(viewH + viewT > clienT);                    
-                    if(parentThis.register[t.name].view) {
-                        if( !( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) ) {
-                            if(parentThis.register[t.name].repe) {
-                                parentThis.hide([t]);
-                                parentThis.register[t.name].view = false;
-                            }
+            clienH = null,
+            clienW = null,
+            clienT = null,
+            clienL = null;
+            
+            for(; i < l ; i++ ) {
+                t = c[i];
+                clienH = t.dom.height();
+                clienW = t.dom.width();
+                clienT = t.dom.scrollTop() || t.dom[0].offsetTop;
+                clienL = t.dom.scrollLeft() || t.dom[0].offsetLeft;
+                if(parentThis.register[t.tag].view) {//已经进入视口
+                    if( !( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) ) {//不在视口中
+                        if(parentThis.register[t.tag].repe) {
+                            parentThis.register[t.tag].view = false;
+                            parentThis.hide([t]);
                         }
                     }
                     else {
-                        if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) { //在视口中
-                            parentThis.register[t.name].view = true;
+                        parentThis.register[t.tag].view = true;
+                    }
+                }
+                else {//移出视口
+                    if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) { //在视口中
+                        parentThis.register[t.tag].view = true;
+                        
+                        if(parentThis.register[t.tag].ani === 0) {
+                            parentThis.register[t.tag].ani = 1;
                             parentThis.working([t]);
                         }
                     }
-//                    console.log("clien: ", clienH, clienW, clienT, clienL);
-                }                
+                }
+            }
         },
         srcoll: function() {//滚动监控
             var parentThis = this;
-            parentThis.lazy();
+            parentThis.lazy();            
             $(window).on('scroll', function() {
                 parentThis.lazy();
             });
         },
         register: {//懒加载注册
         },
-        init: function() {//初始化
+        random: function(n) {
+            var chars = '_ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz',
+                l = chars.length,
+                i = 0,
+                s = '',
+                gt = new Date().getTime() + '';
+            for(; i < n; i++) {
+                s += chars.charAt( Math.floor(Math.random()*l) );
+            }
+            s += '_' + gt.substring(gt.length - n);
+            return s;
+        },
+        init: function() {//初始化        
             this.setConfig(arguments[0]);
-            this.hide(arguments[0]);
+            this.hide();
             this.unlazy();
             this.srcoll();
         }
