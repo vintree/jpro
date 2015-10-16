@@ -1,8 +1,7 @@
 #Lazing
 
-Lazing灵感来自lazyload、苹果官网效果，
 
-能够快速搭建出Apple官网的图片文字效果
+Lazing迎来了第二个版本的更新，核心算法重新设计，提高算法强度，对多种可能进行预判，代码更加简介，是一个非常轻的组件，但他很强大！
 
 > **可自定义支持**
 > 
@@ -13,7 +12,8 @@ Lazing灵感来自lazyload、苹果官网效果，
 > - 方向（上下左右）
 > - 是否开启懒加载(在视口时加载和初始化时)
 > - 是否开启重复模式（再次移入视口时再次加载）
-
+> - 初始隐藏度*
+> - 最后隐藏度*
 
 使用方法
 ====
@@ -27,41 +27,41 @@ Lazing灵感来自lazyload、苹果官网效果，
 | orien  |  偏移方向(上下左右)  |  left  |  string |
 | lazy  |  是否开启懒加载模式  |  false  |  boo |
 | repe  |  是否开启重复模式  |  false  |  boo |
+| startOpacity* | 初始隐藏度 | 0 | num |
+| endOpacity* | 最后隐藏度 | 1 | num |
 
 ```
-//首先在</body>之前引入一下组件，lazing依赖jquery，简单效果在index.html中
+//首先在</body>之前引入一下组件，lazing依赖jquery，简单效果在demo1.html中
 	<script src="jquery.min.js"></script>
 	<script src="lazing.min.js"></script>
 	<script>
 		lazy.init([
         {
-            name: '.lazy1',//作用对象
+            name: '.index-nav-li',
             time: 1000,//执行时间
-            offset: '200',//偏移量
-            orien: 'top',//方向
+            delay: 0,//延迟时间
+            offset: '100',//偏移量
+            orien: 'left',//方向
             lazy: true,//是否支持赖加载
-            repe: true,//是否支持重复
-        },
-        {
-            name: '.lazy2',//作用对象
-
-        },
-        {
-            name: '.lazy'
-        },
-        {
-            name: '#div',
-            lazy: true,
-            repe: true
+            repe: false,//是否支持重复
+            startOpacity: 0.3,//起始隐藏
+            endOpacity: 0.8//结束隐藏
         }
     ]);  
-	
 	</script>
 
 ```
 
 更新
 ======
+2015年10月16日 v0.2
+
+*	「新增」一个demo实例，可体现组件的强大！
+*	「更新」可设置初始化隐藏度和最后隐藏度（startOpacity，endOpacity）
+*	「更新」将DOM名称注册改为真实DOM对象注册
+*	
+* 「bug 」修复多层容器加载时orien累加问题
+* 「bug 」修复例如一个class对应多个DOM，无法独立监控问题 
 
 
 2015年10月05日 v0.1
@@ -70,7 +70,7 @@ Lazing灵感来自lazyload、苹果官网效果，
 
 ------------
 
-[![](http://www.ad-cn.net/photo/85211406170613.jpg '搜狐视频')](http://tv.sohu.com/)
+[![](http://image.jobcn.com/images/hr/2014/6/210048_4.jpg '搜狐视频')](http://tv.sohu.com/)
 
 ------------
 
