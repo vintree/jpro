@@ -1,0 +1,14 @@
+{
+    "name": "lazing",
+    "version": "1.0.0",
+    "private": true,
+    "author": "wuguzi",
+    "homepage": "https://github.com/wuguzi",
+    "license": "BSD",
+    "dependencies" :{
+        
+    },
+    "devDependencies": {
+        
+    }
+}
