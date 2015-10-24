@@ -189,5 +189,5 @@
             this.srcoll();
         }
     };
-    g.lazy = lazy;    
+    window.lazy = lazy;    
 })(jQuery, window);
