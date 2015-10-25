@@ -37,25 +37,6 @@ var transform = {
 //        console.log(options);
         var Obj = this,
             amazing = {
-            let: {
-                scale: 'scale',
-                scaleX: 'scaleX',
-                scaleY: 'scaleY',
-                scaleZ: 'scaleZ',
-                scale3D: 'scale3D',
-                rotate: 'rotate',
-                rotateX: 'roateX',
-                rotateY: 'rotateY',
-                rotateZ: 'rotateZ',
-                rotate3D: 'rotate3D',
-                skew: 'skew',
-                skewX: 'skewX',
-                skewY: 'skewY',
-                skewZ: 'skewZ',
-                skew3D: 'skew3D',
-                matrix: 'matrix',
-                matrix3D: 'matrix3D'
-            },
             timing: {
                 'linear': 'linear',
                 'ease': 'ease',
@@ -63,18 +44,12 @@ var transform = {
                 'ease-in': 'ease-in',
                 'ease-in-out': 'ease-in-out',
             },
-//            extend: ['o', 'ms', 'webkit', 'moz'],
-            config: {},
-            core: function() {//核心处理
-
-            },
             format: function(className) {//多浏览器扩展名
                 var arr = [];
                 this.extend.forEach(function(value, index) {
                     arr.push('-' + value + '-' + className);
                 });
                 arr.push(className);            
-    //            console.log(arr);
                 return arr;
             },
             
@@ -90,9 +65,9 @@ var transform = {
             rotate: function(data) {
                 var rotate = '',
                     x, y, z, a;
-                x = data[0] || '0';
-                y = data[1] || '0';
-                z = data[2] || '0';
+                x = data[0];
+                y = data[1];
+                z = data[2];
                 a = this.isDEG(data[3] || '0deg');
                 rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
                 return rotate;
@@ -113,13 +88,21 @@ var transform = {
                 scale += 'scale(' + x + ', ' + y + ') ';
                 return scale;
             },
-            factory: function(data) {//不循环动画
+            origin: function(data) {
+                var origin = '',
+                    x, y;
+                x = data[0];
+                y = data[1];
+                origin += this.isPX(x) + ' ' + this.isPX(y) + ';';
+                origin += this.extend('transform-origin', origin);
+                return origin;
+            },
+            factory: function(data) {//工厂
                 var timing = '',
                     kernel = this.kernel(),
                     transition = '',
                     transform = '',
-                    transformOut,
-                    transitionOut;
+                    origin = '';
                 if(this.timing[data.timing]) {
                     timing = data.timing;
                 }
@@ -131,7 +114,7 @@ var transform = {
                     } else {
                         console.error('「timing」不是数组或合法的参数 || timing is not Array or legal parameters');
                         return;
-                    }             
+                    }        
                 }
                 transition = 'all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
                 transition = this.extend('transition', transition);
@@ -144,23 +127,22 @@ var transform = {
                 if(!!data.css.skew) {//缩放
                     transform += this.skew(data.css.skew);
                 }
-                if(!!data.css.scale) {
+                if(!!data.css.scale) {//比例
                     transform += this.scale(data.css.scale);
                 }
+                if(!!data.css.origin) {
+                    origin += this.origin(data.css.origin);
+                }
                 transform += ';';
-                transform = this.extend('transform', transform);
-                
-                console.log(transform);
-                console.log(transition);
-                
+                transform = this.extend('transform', transform) + origin;
                 this.outPrint(data, transform, transition);
             },
-            extend: function(name, data) {
+            extend: function(name, data) {//浏览器扩展名
                 var extend = this.kernel(),
                     str = ''+ name +': ' + data,
                     str_kernel = extend + ''+ name +': ' + data;
                 return str_kernel + str;
-            },                            
+            },
 //            animate: function(data) {//循环动画
 //                
 //            },
@@ -176,7 +158,7 @@ var transform = {
                     Obj.attr('style', Obj.attr('style') + transform);
                 });
             },
-            initArray: function(data) {//判断是否是数组对象
+            initArray: function(data) {//判断数组对象
                 var objType = Object.prototype.toString.call(data),
                     arr = [];
                 if(objType === '[object Object]') {
@@ -190,13 +172,13 @@ var transform = {
                 }
                 return arr;
             },
-            isPX: function(data) {//检测单位是否为px
-                if(!isNaN(data)) {//是纯数字
+            isPX: function(data) {//检测px单位
+                if(!isNaN(data)) {//纯数字
                     return data + 'px';
                 }
                 return data;
             },
-            isDEG: function(data) {
+            isDEG: function(data) {//检测deg单位
                 if(!isNaN(data)) {
                     return Number(data) + 'deg';
                 }
@@ -205,19 +187,14 @@ var transform = {
             kernel: function() {//检测浏览器内核
                 var agent = navigator.userAgent.toLowerCase();
                 if(agent.indexOf('webkit') >= 0) {
-                    console.log('chrome');
                     return '-webkit-';
                 } else if(agent.indexOf('gecko') >= 0) {
-                    console.log('火狐')
                     return '-moz-'
                 } else if(agent.indexOf('windows') >= 0) {
-                    console.log('IE');
                     return '-ms-';
                 } else if(agent.indexOf('opera') >= 0) {
-                    console.log('Opera');
                     return '-o-';
                 }
-//                console.log(agent);
             },
             init: function(options) {//初始化
                 var arr = this.initArray(options);
@@ -241,40 +218,15 @@ $('div').amazing({
     delay: 0,
     timing: [0.68, -0.55, 0.27, 1.55],//'ease-out',
     css: {
-        width: '200px',
-        height: '200px',
-        'background-color': 'yellow',
+        width: '150',
+        height: '150',
+        'background-color': 'blue',
         opacity: 1,
         translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
         rotate: [.6, 1, .6, '80deg'],//
         skew: [-15, -15],
         scale: [2, 2],
+        origin: ['30', '30']
     },
     repe: false,//重复动画
 });
-
-//amazing.init([
-//    {
-//        domName: 'div',//对象对象
-//        cssName: 'transition',//样式名
-//        timing: [0.68, -0.55, 0.27, 1.55],//'ease-out',
-//        time: 1000,
-//        css: {
-//            width: '200px',
-//            height: '200px',
-//            'background-color': 'yellow',
-//            opacity: 1,
-//            top: '100px',
-//            left: '100px'
-//        },
-//        params: [1],//参数
-//        repe: false,//重复动画
-//        
-//    },
-//]);
-
-
-//transition: all 1s cubic-bezier(0.68, -0.55, 0.27, 1.55)
-//transition: all 5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-
-//amazing.init(function(){});
