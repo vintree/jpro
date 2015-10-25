@@ -23,12 +23,6 @@ var transform = {
     matrix3D: 'matrix3D'
 }
 
-
-function style(data) {
-    
-}
-
-
 //style(
 //    '@-webkit-keyframes mymove'+
 //	'{	0 {transform: scale3d(1,1,1);}'+
@@ -36,8 +30,6 @@ function style(data) {
 //		'100% {transform: scale3d(1,1,1);}'+
 //	'}'
 //);
-
-
 
 ;(function($, g) {
     'use strict';
@@ -86,8 +78,9 @@ function style(data) {
                 return arr;
             },
             transition: function(data) {//不循环动画
-                var str = '';
-                var timing = '';
+                var str = '',
+                    timing = '',
+                    transform = '-webkit-transform: ';
                 if(this.timing[data.timing]) {
                     timing = data.timing;
                 }
@@ -99,53 +92,91 @@ function style(data) {
                     } else {
                         console.error('「timing」不是数组或合法的参数 || timing is not Array or legal parameters');
                         return;
-                    }                
+                    }             
                 }
 //                this.extend.forEach(function(v) {
 //                    str += '-' + v + '-transition: all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
 //                }, amazing)
                 str += 'transition: all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
-                str += '-webkit-transform: translate3d(0, 0, 0);';
-//                console.log(str);
-                
-                this.position(data, str);
-//                this.outPrint(data, str);
-            },
-            position: function(data, str) {//位置移动
-                var css = JSON.stringify(data.css),
-                    posi = '';
-                if(/^left|right|top|bottom/.test(css)) {
-                    posi += '-webkit-transform: translate3d(200px, 200px, 200px);';
+//                str += '-webkit-transform: translate3d(0, 0, 0) rotate(0, 0, 0, 0deg)';
+                if(!!data.css.translate) {//位置
+                    transform += this.translate(data.css.translate);
                 }
-                
-                
-//                console.log(str);
-                
-                this.outPrint(data, posi, str);
+                if(!!data.css.rotate) {//旋转
+                    transform += this.rotate(data.css.rotate);
+                }
+                if(!!data.css.skew) {//缩放
+                    transform += this.skew(data.css.skew);
+                }
+                if(!!data.css.scale) {
                     
+                    console.log(transform);
+                    
+                    transform += this.scale(data.css.scale);
+                    console.log(transform);
+                }
+//                if(!!data.css.matrix) {//矩阵
+//                    transform += this.matrix(data.css.matrix);
+//                }
+                transform += ';';
+                
+                console.log(transform);
+                
+                this.outPrint(data, transform, str);
+            },
+            translate: function(data) {//位置移动
+                var translate = '',
+                    x, y, z;
+                x = this.isPX(data[0] || '0px');
+                y = this.isPX(data[1] || '0px');
+                z = this.isPX(data[2] || '0px');
+                translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';     
+                return translate;
+            },
+            rotate: function(data) {
+                var rotate = '',
+                    x, y, z, a;
+                x = data[0] || '0';
+                y = data[1] || '0';
+                z = data[2] || '0';
+                a = this.isDEG(data[3] || '0deg');
+                rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
+                return rotate;
+            },
+            skew: function(data) {
+                var skew = '',
+                    x, y;
+                x = this.isDEG(data[0] || '0px');
+                y = this.isDEG(data[1] || '0px');
+                skew += 'skew(' + x + ', ' + y + ') ';
+                return skew;    
+            },
+            scale: function(data) {
+                var scale = '',
+                    x, y;
+                x = data[0];
+                y = data[1];
+                scale += 'scale(' + x + ', ' + y + ') ';
+                return scale;
             },
             animate: function(data) {//循环动画
 //                var arr = this.format(data.cssName);
             },
-            keyframs: function() {//动画函数            
+            keyframs: function() {//动画函数
     //            @keyframes mymove {
     //              from {top:0px;}
     //              to {top:200px;}
     //            }
                 var s = '';
             },
-            outPrint: function(data, posi, str) {//最终输出
-                
-//                console.log(str);
-                
-//                str += 'top: 0px;bottom: 0;left: 0;right: 0;';
+            outPrint: function(data, transform, str) {//最终输出
                 Obj.attr('style', str);
                 setTimeout(function() {
                     Obj.css(data.css);
-                },0);
-                setTimeout(function() {                    
-                    Obj.attr('style', Obj.attr('style') + posi);
-                },10);
+                });
+                setTimeout(function() {                
+                    Obj.attr('style', Obj.attr('style') + transform);
+                });
             },
             initArray: function(data) {//判断是否是数组对象
                 var objType = Object.prototype.toString.call(data),
@@ -161,8 +192,20 @@ function style(data) {
                 }
                 return arr;
             },
+            isPX: function(data) {//检测单位是否为px
+                if(!isNaN(data)) {//是纯数字
+                    return data + 'px';
+                }
+                return data;
+            },
+            isDEG: function(data) {
+                if(!isNaN(data)) {
+                    return Number(data) + 'deg';
+                }
+                return data;
+            },
             kernel: {//检测浏览器内核
-
+                
             },
             init: function(options) {//初始化
                 var arr = this.initArray(options);
@@ -181,20 +224,19 @@ function style(data) {
 })(jQuery);
 
 
-
-
 $('div').amazing({
     time: 2000,
-//    delay: 1000,
+    delay: 0,
     timing: [0.68, -0.55, 0.27, 1.55],//'ease-out',
     css: {
         width: '200px',
         height: '200px',
         'background-color': 'yellow',
         opacity: 1,
-        top: '100px',
-        left: '100px',
-        scale: 1
+        translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+        rotate: [.6, 1, .6, '80deg'],//
+        skew: [-15, -15],
+        scale: [2, 2],
     },
     repe: false,//重复动画
 });
