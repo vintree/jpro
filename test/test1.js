@@ -63,7 +63,7 @@ var transform = {
                 'ease-in': 'ease-in',
                 'ease-in-out': 'ease-in-out',
             },
-            extend: ['o', 'ms', 'webkit', 'moz'],
+//            extend: ['o', 'ms', 'webkit', 'moz'],
             config: {},
             core: function() {//核心处理
 
@@ -77,53 +77,7 @@ var transform = {
     //            console.log(arr);
                 return arr;
             },
-            transition: function(data) {//不循环动画
-                var str = '',
-                    timing = '',
-                    transform = '-webkit-transform: ';
-                if(this.timing[data.timing]) {
-                    timing = data.timing;
-                }
-                else {
-                    if(data.timing instanceof Array) {
-                        timing += 'cubic-bezier(';
-                        timing += data.timing.join(',');
-                        timing += ')';
-                    } else {
-                        console.error('「timing」不是数组或合法的参数 || timing is not Array or legal parameters');
-                        return;
-                    }             
-                }
-//                this.extend.forEach(function(v) {
-//                    str += '-' + v + '-transition: all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
-//                }, amazing)
-                str += 'transition: all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
-//                str += '-webkit-transform: translate3d(0, 0, 0) rotate(0, 0, 0, 0deg)';
-                if(!!data.css.translate) {//位置
-                    transform += this.translate(data.css.translate);
-                }
-                if(!!data.css.rotate) {//旋转
-                    transform += this.rotate(data.css.rotate);
-                }
-                if(!!data.css.skew) {//缩放
-                    transform += this.skew(data.css.skew);
-                }
-                if(!!data.css.scale) {
-                    
-                    console.log(transform);
-                    
-                    transform += this.scale(data.css.scale);
-                    console.log(transform);
-                }
-//                if(!!data.css.matrix) {//矩阵
-//                    transform += this.matrix(data.css.matrix);
-//                }
-                transform += ';';
-                
-                console.log(transform);
-                
-                this.outPrint(data, transform, str);
-            },
+            
             translate: function(data) {//位置移动
                 var translate = '',
                     x, y, z;
@@ -159,18 +113,62 @@ var transform = {
                 scale += 'scale(' + x + ', ' + y + ') ';
                 return scale;
             },
-            animate: function(data) {//循环动画
-//                var arr = this.format(data.cssName);
+            factory: function(data) {//不循环动画
+                var timing = '',
+                    kernel = this.kernel(),
+                    transition = '',
+                    transform = '',
+                    transformOut,
+                    transitionOut;
+                if(this.timing[data.timing]) {
+                    timing = data.timing;
+                }
+                else {
+                    if(data.timing instanceof Array) {
+                        timing += 'cubic-bezier(';
+                        timing += data.timing.join(',');
+                        timing += ')';
+                    } else {
+                        console.error('「timing」不是数组或合法的参数 || timing is not Array or legal parameters');
+                        return;
+                    }             
+                }
+                transition = 'all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
+                transition = this.extend('transition', transition);
+                if(!!data.css.translate) {//位置
+                    transform += this.translate(data.css.translate);
+                }
+                if(!!data.css.rotate) {//旋转
+                    transform += this.rotate(data.css.rotate);
+                }
+                if(!!data.css.skew) {//缩放
+                    transform += this.skew(data.css.skew);
+                }
+                if(!!data.css.scale) {
+                    transform += this.scale(data.css.scale);
+                }
+                transform += ';';
+                transform = this.extend('transform', transform);
+                
+                console.log(transform);
+                console.log(transition);
+                
+                this.outPrint(data, transform, transition);
             },
-            keyframs: function() {//动画函数
-    //            @keyframes mymove {
-    //              from {top:0px;}
-    //              to {top:200px;}
-    //            }
-                var s = '';
-            },
-            outPrint: function(data, transform, str) {//最终输出
-                Obj.attr('style', str);
+            extend: function(name, data) {
+                var extend = this.kernel(),
+                    str = ''+ name +': ' + data,
+                    str_kernel = extend + ''+ name +': ' + data;
+                return str_kernel + str;
+            },                            
+//            animate: function(data) {//循环动画
+//                
+//            },
+//            keyframs: function() {//动画函数
+//                var s = '';
+//            },
+            outPrint: function(data, transform, transition) {//最终输出
+                Obj.attr('style', transition);
                 setTimeout(function() {
                     Obj.css(data.css);
                 });
@@ -204,8 +202,22 @@ var transform = {
                 }
                 return data;
             },
-            kernel: {//检测浏览器内核
-                
+            kernel: function() {//检测浏览器内核
+                var agent = navigator.userAgent.toLowerCase();
+                if(agent.indexOf('webkit') >= 0) {
+                    console.log('chrome');
+                    return '-webkit-';
+                } else if(agent.indexOf('gecko') >= 0) {
+                    console.log('火狐')
+                    return '-moz-'
+                } else if(agent.indexOf('windows') >= 0) {
+                    console.log('IE');
+                    return '-ms-';
+                } else if(agent.indexOf('opera') >= 0) {
+                    console.log('Opera');
+                    return '-o-';
+                }
+//                console.log(agent);
             },
             init: function(options) {//初始化
                 var arr = this.initArray(options);
@@ -214,7 +226,7 @@ var transform = {
                         this.animate(value)
                     }
                     else {
-                        this.transition(value);
+                        this.factory(value);
                     }
                 }, amazing);          
             }
