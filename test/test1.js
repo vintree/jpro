@@ -1,36 +1,3 @@
-var transform_scale = ['scale', 'scaleX', 'scaleY', 'scaleZ', 'scale3d'],
-    transform_rotate = ['rotate', 'rotateX', 'rotateY', 'rotateZ', 'rotate3D'],
-    transform_skew = ['skew', 'skewX', 'skewY', 'skewZ', 'skew3D'],
-    transform_matrix = ['matrix', 'matrix3D'];
-
-var transform = {
-    scale: 'scale',
-    scaleX: 'scaleX',
-    scaleY: 'scaleY',
-    scaleZ: 'scaleZ',
-    scale3D: 'scale3D',
-    rotate: 'rotate',
-    rotateX: 'roateX',
-    rotateY: 'rotateY',
-    rotateZ: 'rotateZ',
-    rotate3D: 'rotate3D',
-    skew: 'skew',
-    skewX: 'skewX',
-    skewY: 'skewY',
-    skewZ: 'skewZ',
-    skew3D: 'skew3D',
-    matrix: 'matrix',
-    matrix3D: 'matrix3D'
-}
-
-//style(
-//    '@-webkit-keyframes mymove'+
-//	'{	0 {transform: scale3d(1,1,1);}'+
-//        '50% {transform: scale3d(2,4,7)}'+
-//		'100% {transform: scale3d(1,1,1);}'+
-//	'}'
-//);
-
 ;(function($, g) {
     'use strict';
     $.fn.amazing = function(options) {
@@ -143,12 +110,6 @@ var transform = {
                     str_kernel = extend + ''+ name +': ' + data;
                 return str_kernel + str;
             },
-//            animate: function(data) {//循环动画
-//                
-//            },
-//            keyframs: function() {//动画函数
-//                var s = '';
-//            },
             outPrint: function(data, transform, transition) {//最终输出
                 Obj.attr('style', transition);
                 setTimeout(function() {
@@ -211,7 +172,6 @@ var transform = {
         amazing.init(options);
     }
 })(jQuery);
-
 
 $('div').amazing({
     time: 2000,
