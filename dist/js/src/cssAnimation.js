@@ -7,7 +7,8 @@ jQuery.fn.cssAnimation = function(options) {
             'ease': 'ease',
             'ease-out': 'ease-out',
             'ease-in': 'ease-in',
-            'ease-in-out': 'ease-in-out'
+            'ease-in-out': 'ease-in-out',
+            'back': 'cubic-bezier(0.68, -0.55, 0.27, 1.55) '
         },
         translate: function(data) {//位置移动
             var translate = '',
@@ -59,16 +60,13 @@ jQuery.fn.cssAnimation = function(options) {
                 transform = '',
                 origin = '';
             if(this.timing[data.timing]) {
-                timing = data.timing;
+                timing = this.timing[data.timing];
             }
             else {
                 if(data.timing instanceof Array) {
                     timing += 'cubic-bezier(';
                     timing += data.timing.join(',');
                     timing += ')';
-                } else {
-                    console.error('「timing」不是数组或合法的参数 || timing is not Array or legal parameters');
-                    return;
                 }
             }
             transition = 'all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
@@ -121,7 +119,6 @@ jQuery.fn.cssAnimation = function(options) {
         }
     };
     cssAnimation.init(options);
-    
 };
 
 $.extend({
@@ -151,10 +148,6 @@ $.extend({
         } else if(objType === '[object Array]') {
             arr = data;
         }
-//        else {
-//            console.error('Parameter error');
-//            return;
-//        }
         return arr;
     },
     _isPX: function(data) {//检测px单位

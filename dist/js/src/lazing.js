@@ -27,7 +27,7 @@ $.fn.lazing = function(options) {
                 tag = null,
                 dom = null,
                 arr = [];
-            tag = this.random(4);
+            tag = $._random(4);
             for(o in this.lets) {//扫描属性
                 t[o] = options && options[o] || this.lets[o];
             }
@@ -39,7 +39,7 @@ $.fn.lazing = function(options) {
                     for(var s in t) {//复制t
                         temp[s] = t[s];
                     }
-                    tag = this.random(4);
+                    tag = $._random(4);
                     temp.tag = tag;
                     temp.dom = dom.eq(di);
                     arr.push(temp);
@@ -159,18 +159,6 @@ $.fn.lazing = function(options) {
         },
         register: {//懒加载注册
         },
-        random: function(n) {
-            var chars = '_ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz',
-                l = chars.length,
-                i = 0,
-                s = '',
-                gt = new Date().getTime() + '';
-            for(; i < n; i++) {
-                s += chars.charAt( Math.floor(Math.random()*l) );
-            }
-            s += '_' + gt.substring(gt.length - n);
-            return s;
-        },
         init: function(options) {//初始化        
             this.setConfig(options);
             this.hide();
@@ -182,6 +170,17 @@ $.fn.lazing = function(options) {
 };
 
 $.extend({
-    
+    _random: function(n) {
+        var chars = '_ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz',
+            l = chars.length,
+            i = 0,
+            s = '',
+            gt = new Date().getTime() + '';
+        for(; i < n; i++) {
+            s += chars.charAt( Math.floor(Math.random()*l) );
+        }
+        s += '_' + gt.substring(gt.length - n);
+        return s;
+    },
 })
 
