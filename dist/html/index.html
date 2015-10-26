@@ -3,8 +3,9 @@
 	<head>
         <meta charset="UTF-8">
         <script src="../js/lib/jquery.min.js"></script>
-        <script src="../js/lib/jquery.transit.min.js"></script>
         <script src="../js/src/lazing.js"></script>
+<!--        <script src="../js/src/amazing.js"></script>-->
+        <script src="../js/src/cssAnimation.js"></script>
 	</head>
 	<body>
         <span>阿门：</span>
@@ -18,29 +19,67 @@
 </html>
 
 <script>
-    lazy.init([
-        {
-            name: '.lazy1',//作用对象
-            time: 1000,//执行时间
-            delay: 0,//延迟时间
-            offset: '100',//偏移量
-            orien: 'top',//方向
-            lazy: true,//是否支持赖加载
-            repe: true,//是否支持重复
-            startOpacity: 0,//起始隐藏
-            endOpacity: 1//结束隐藏
-        },
-        {
-            name: '.lazy2'
-
-        },
-        {
-            name: '.lazy'
-        },
-        {
-            name: '#div',
-            lazy: true,
-            repe: true
-        }
-    ]);
+    
+    
+//    $('.lazy1').cssAnimation({
+//        time: 2000,
+//        delay: 0,
+//        timing: [0.68, -0.55, 0.27, 1.55],//'ease-out',
+//        css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+//            opacity: 1,
+//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '80deg'],//
+//            skew: [-15, -15],
+//            scale: [2, 2],
+//            origin: ['30', '30']
+//        },
+//        repe: false,//重复动画
+//    });
+    
+    
+    $('.lazy1').lazing({
+        time: 1000,//执行时间
+        delay: 0,//延迟时间
+        offset: '100',//偏移量
+        orien: 'top',//方向
+        lazy: true,//是否支持赖加载
+        repe: true,//是否支持重复
+        startOpacity: 0.5,//起始隐藏
+        endOpacity: 1//结束隐藏
+    });
+//    
+//    $('.lazy2').lazing();
+//    $('#div').lazing({
+//        lazy: true,
+//        repe: true
+//    });
+    
+//    lazy.init([
+//        {
+//            name: '.lazy1',//作用对象
+//            time: 1000,//执行时间
+//            delay: 0,//延迟时间
+//            offset: '100',//偏移量
+//            orien: 'top',//方向
+//            lazy: true,//是否支持赖加载
+//            repe: true,//是否支持重复
+//            startOpacity: 0,//起始隐藏
+//            endOpacity: 1//结束隐藏
+//        },
+//        {
+//            name: '.lazy2'
+//
+//        },
+//        {
+//            name: '.lazy'
+//        },
+//        {
+//            name: '#div',
+//            lazy: true,
+//            repe: true
+//        }
+//    ]);
 </script>

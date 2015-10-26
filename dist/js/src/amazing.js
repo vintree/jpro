@@ -83,7 +83,7 @@
                     } else {
                         console.error('「timing」不是数组或合法的参数 || timing is not Array or legal parameters');
                         return;
-                    }        
+                    }
                 }
                 transition = 'all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
                 transition = this.extend('transition', transition);
