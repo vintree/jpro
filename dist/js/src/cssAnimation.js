@@ -13,9 +13,9 @@ jQuery.fn.cssAnimation = function(options) {
         translate: function(data) {//位置移动
             var translate = '',
                 x, y, z;
-            x = $._isPX(data[0] || '0px');
-            y = $._isPX(data[1] || '0px');
-            z = $._isPX(data[2] || '0px');
+            x = $.skyFun.skyFun(data[0] || '0px');
+            y = $.skyFun.skyFun(data[1] || '0px');
+            z = $.skyFun.skyFun(data[2] || '0px');
             translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';
             return translate;
         },
@@ -25,15 +25,15 @@ jQuery.fn.cssAnimation = function(options) {
             x = data[0];
             y = data[1];
             z = data[2];
-            a = $._isDEG(data[3] || '0deg');
+            a = $.skyFun.isDEG(data[3] || '0deg');
             rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
             return rotate;
         },
         skew: function(data) {
             var skew = '',
                 x, y;
-            x = $._isDEG(data[0] || '0px');
-            y = $._isDEG(data[1] || '0px');
+            x = $.skyFun.isDEG(data[0] || '0px');
+            y = $.skyFun.isDEG(data[1] || '0px');
             skew += 'skew(' + x + ', ' + y + ') ';
             return skew;    
         },
@@ -50,8 +50,8 @@ jQuery.fn.cssAnimation = function(options) {
                 x, y;
             x = data[0];
             y = data[1];
-            origin += $._isPX(x) + ' ' + $._isPX(y) + ';';
-            origin += $._privateProperty('transform-origin', origin);
+            origin += $.skyFun.skyFun(x) + ' ' + $.skyFun.skyFun(y) + ';';
+            origin += $.skyFun.privateProperty('transform-origin', origin);
             return origin;
         },
         factory: function(data) {//工厂
@@ -70,7 +70,7 @@ jQuery.fn.cssAnimation = function(options) {
                 }
             }
             transition = 'all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
-            transition = $._privateProperty('transition', transition);
+            transition = $.skyFun.privateProperty('transition', transition);
             if(!!data.css.translate) {//位置
                 transform += this.translate(data.css.translate);
             }
@@ -87,28 +87,26 @@ jQuery.fn.cssAnimation = function(options) {
                 origin += this.origin(data.css.origin);
             }
             transform += ';';
-            transform = $._privateProperty('transform', transform) + origin;
+            transform = $.skyFun.privateProperty('transform', transform) + origin;
             this.outPrint(data, transform, transition);
         },
-        
         outPrint: function(data, transform, transition) {//最终输出
             var str = transition + Obj.attr('style') + ';';
-            if(!$._isBlock(Obj)) {
+            if(!$.skyFun.isBlock(Obj)) {
                 str += 'display: inline-block;';
             }
             Obj.attr('style', str);
-            Obj.css(data.css);
-//            setTimeout(function() {
-//                Obj.css(data.css);
-//            });
+//            Obj.css(data.css);
+            setTimeout(function() {
+                Obj.css(data.css);
+            }, 1000/60);
             setTimeout(function() {
                 Obj.attr('style', Obj.attr('style') + transform);
             });
-            
         },
         init: function(options) {//初始化
-            var arr = $._initArray(options);
-            arr.forEach(function(value, index, arr) {
+            var arr = $.skyFun.initArray(options);
+            arr.forEach(function(value) {
                 if(value.repe) {
                     this.animate(value);
                 }
@@ -121,14 +119,14 @@ jQuery.fn.cssAnimation = function(options) {
     cssAnimation.init(options);
 };
 
-$.extend({
-    _privateProperty: function(name, data) {//浏览器扩展名
-        var extend = $._kernel(),
+$.extend($.skyFun, {
+    privateProperty: function(name, data) {//浏览器扩展名
+        var extend = $.skyFun.kernel(),
             str = ''+ name +': ' + data,
             strKernel = extend + ''+ name +': ' + data;
         return strKernel + str;
     },
-    _kernel: function() {//检测浏览器内核
+    kernel: function() {//检测浏览器内核
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('webkit') >= 0) {
             return '-webkit-';
@@ -140,7 +138,7 @@ $.extend({
             return '-o-';
         }
     },
-    _initArray: function(data) {//判断数组对象
+    initArray: function(data) {//判断数组对象
         var objType = Object.prototype.toString.call(data),
             arr = [];
         if(objType === '[object Object]') {
@@ -150,21 +148,21 @@ $.extend({
         }
         return arr;
     },
-    _isPX: function(data) {//检测px单位
+    isPX: function(data) {//检测px单位
         if(!isNaN(data)) {//纯数字
             return data + 'px';
         }
         return data;
     },
-    _isDEG: function(data) {//检测deg单位
+    isDEG: function(data) {//检测deg单位
         if(!isNaN(data)) {
             return Number(data) + 'deg';
         }
         return data;
     },
-    _isBlock: function(obj) {
+    isBlock: function(obj) {
         var block = ['address', 'blockquote', 'center' ,'dir', 'div', 'dl', 'fieldset', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'isindex', 'menu', 'noframes', 'ol', 'p', 'pre', 'table', 'ul'];
-        block = block.join(",");
+        block = block.join(',');
         if(block.indexOf(obj[0].tagName.toLowerCase()) >= 0) {
             return true;
         }

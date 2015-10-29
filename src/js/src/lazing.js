@@ -120,7 +120,6 @@ $.fn.lazing = function(options) {
             clienW = null,
             clienT = null,
             clienL = null;
-
             for(; i < l ; i++ ) {
                 t = c[i];
                 clienH = t.dom.height();

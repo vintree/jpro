@@ -3,8 +3,9 @@
     lazing V 0.21
     wuguzix@foxmail.com
 */
-$.fn.lazing = function(options) {
-    var Obj = this,
+$.fn.lazing = function(options, lazy, repe) {
+    var DOM = this,
+        stor = 'lazing_register',
         lazing = {
         lets: {
             time: 1000,//执行时间
@@ -22,40 +23,65 @@ $.fn.lazing = function(options) {
         config: [],//不支持懒加载
         lazyConfig: [],//支持懒加载
         setConfig: function(options) {//分配数据类型
-            var o = null,
-                t = {},
-                tag = null,
-                dom = null,
-                arr = [];
-            tag = $._random(4);
-            for(o in this.lets) {//扫描属性
-                t[o] = options && options[o] || this.lets[o];
-            }
-            t.dom = Obj;
-            if(t.lazy) {
-                dom = Obj;
-                for(var di = 0, dl = dom.length; di < dl; di++) {//分离一个class对应多个DOM
-                    var temp = {};
-                    for(var s in t) {//复制t
-                        temp[s] = t[s];
+            var tmpe = {},
+                uuid = null,
+                domIX;
+//            uuid = $._random(4);//唯一标识码
+//            tmpe.dom = DOM;//缓存对象
+            if(lazy) {
+                for(domIX = DOM.length; domIX--;) {//分离一个class对应多个DOM
+                    uuid = $.skyFun.uuid(4);//唯一标识码
+                    tmpe.dom = DOM.eq(domIX);//缓存对象
+                    tmpe.css = DOM.eq(domIX).attr('style');
+                    this.register[uuid] = {
+                        view: false,//视口
+                        repe: repe,//重复
+                        ani: 0,//动画状态
+                        dom: DOM.eq(domIX)//对象
                     }
-                    tag = $._random(4);
-                    temp.tag = tag;
-                    temp.dom = dom.eq(di);
-                    arr.push(temp);
-                    this.lazyConfig.push(temp);
-                    this.register[tag] = {
-                        view: temp.view,
-                        repe: temp.repe,
-                        ani: temp.ani,
-                        dom: temp.dom
-                    };
+                    
+                    console.log(uuid);
+                    
+                    
+                    
+//                    console.log($._register[DOM.eq(domIX)] = uuid);
                 }
             }
-            else {
-                this.config.push(t);
-            }
-            t = {};
+            
+//            console.log(DOM);
+//            
+//            console.log($._register[uuid] = uuid);
+            
+            
+            
+//            for(o in this.lets) {//扫描属性
+//                t[o] = options && options[o] || this.lets[o];
+//            }
+//            t.dom = Obj;
+//            if(t.lazy) {
+//                dom = Obj;
+//                for(var di = 0, dl = dom.length; di < dl; di++) {//分离一个class对应多个DOM
+//                    var temp = {};
+//                    for(var s in t) {//复制t
+//                        temp[s] = t[s];
+//                    }
+//                    tag = $._random(4);
+//                    temp.tag = tag;
+//                    temp.dom = dom.eq(di);
+//                    arr.push(temp);
+//                    this.lazyConfig.push(temp);
+//                    this.register[tag] = {
+//                        view: temp.view,
+//                        repe: temp.repe,
+//                        ani: temp.ani,
+//                        dom: temp.dom
+//                    };
+//                }
+//            }
+//            else {
+//                this.config.push(t);
+//            }
+//            t = {};
         },
         hide: function() {//初始化隐藏
             var arr = arguments[0] || this.config.concat(this.lazyConfig),
@@ -63,7 +89,7 @@ $.fn.lazing = function(options) {
                 i = 0;
             for(; i < l; i++) {
 //                    $(arr[i].name).css('opacity', arr[i].startOpacity);
-                Obj.css('opacity', arr[i].startOpacity);
+                DOM.css('opacity', arr[i].startOpacity);
             }
         },
         factory: function() {//效果工厂       
@@ -85,12 +111,12 @@ $.fn.lazing = function(options) {
                 dom = to.dom;
                 s = dom.attr('style');
                 //TODO 没有设置position的orien无效
-                is['position'] = dom.css('position') === 'static' ? 'relative' : dom.css('position');
-                is['opacity'] = to.endOpacity;
+                is.position = dom.css('position') === 'static' ? 'relative' : dom.css('position');
+                is.opacity = to.endOpacity;
                 is[to.orien] = dom.css(to.orien) === 'auto' ? '0' : dom.css(to.orien);                
                 //TODO 根据DOM初始量进行改进
                 ts = {
-                    position: is['position']
+                    position: is.position
                 };
                 //设置你们位置
                 ts[to.orien] = parseInt(to.offset, 10) + parseInt(is[to.orien], 10) + 'px';
@@ -100,7 +126,7 @@ $.fn.lazing = function(options) {
                     if(to.lazy) {
                         parentThis.register[to.tag].ani = 0;
                     }
-                });
+                })
             }
         },
         unlazy: function() {//不需要懒加载
@@ -120,6 +146,7 @@ $.fn.lazing = function(options) {
             clienW = null,
             clienT = null,
             clienL = null;
+
             for(; i < l ; i++ ) {
                 t = c[i];
                 clienH = t.dom.height();
@@ -163,23 +190,34 @@ $.fn.lazing = function(options) {
             this.hide();
             this.unlazy();
             this.srcoll();
+            
+//            console.log(options, lazy, repe);
+            
         }
     };
     lazing.init(options);
 };
 
 $.extend({
-    _random: function(n) {
+    skyFun: {},
+    skyData: {},
+});
+
+$.extend($.skyFun, {
+    uuid: function(n) {
         var chars = '_ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz',
             l = chars.length,
             i = 0,
             s = '',
+            str = '',
             gt = new Date().getTime() + '';
         for(; i < n; i++) {
             s += chars.charAt( Math.floor(Math.random()*l) );
         }
-        s += '_' + gt.substring(gt.length - n);
-        return s;
-    },
-})
-
+        s += gt.substring(gt.length - n);
+        for(i = 0; i < n; i++) {
+            str += s.charAt(Math.floor(Math.random()*(2*n)))
+        }
+        return str;
+    }
+});

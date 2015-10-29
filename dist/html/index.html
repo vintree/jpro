@@ -3,25 +3,44 @@
 	<head>
         <meta charset="UTF-8">
         <script src="../js/lib/jquery.min.js"></script>
-        <script src="../js/src/lazing.js"></script>
-<!--        <script src="../js/src/amazing.js"></script>-->
+        <script src="../js/src/storage.js"></script>
+        <script src="../js/src/lazy.js"></script>
         <script src="../js/src/cssAnimation.js"></script>
 	</head>
 	<body>
         <span>阿门：</span>
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
+        <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
+        <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
+        <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
+        <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
+        
         <span class="lazy2" style="">hello world2</span>
         <span class="lazy" style="color: red;">hello world-111</span>
+<!--
 		<div style="position: relative;height: 3000px;">
 			<div id="div" style='position: absolute; top: 1500px; left: 0; width: 50px; height: 50px; background-color: red;'></div>
 		</div>
+-->
+        
+        <div>
+            <span>
+                <li id="lazy1"></li>
+            </span>
+            <b>
+                <li id="lazy1"></li>
+            </b>
+        </div>
 	</body>
 </html>
 
 <script>
     
     
-    $('.lazy1').cssAnimation({
+    console.log($('div>span>#lazy1'));
+    
+    
+    $('.lazy1').lazing({
         time: 2000,
         delay: 0,
         timing: 'back',//'ease-out',
@@ -29,15 +48,69 @@
             width: '150',
             height: '150',
             'background-color': 'blue',
-            opacity: 1,
+            opacity: 0,
             translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
             rotate: [.6, 1, .6, '80deg'],//
             skew: [-15, -15],
             scale: [2, 2],
             origin: ['30', '30']
         },
-        repe: false,//重复动画
-    });
+    }, true, true);
+    
+    $('.lazy2').lazing({
+        time: 2000,
+        delay: 0,
+        timing: 'back',//'ease-out',
+        css: {
+            width: '150',
+            height: '150',
+            'background-color': 'blue',
+            opacity: 0,
+            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+            rotate: [.6, 1, .6, '80deg'],//
+            skew: [-15, -15],
+            scale: [2, 2],
+            origin: ['30', '30']
+        },
+    }, true, true);
+    
+     $('.lazy').lazing({
+        time: 2000,
+        delay: 0,
+        timing: 'back',//'ease-out',
+        css: {
+            width: '150',
+            height: '150',
+            'background-color': 'blue',
+            opacity: 0,
+            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+            rotate: [.6, 1, .6, '80deg'],//
+            skew: [-15, -15],
+            scale: [2, 2],
+            origin: ['30', '30']
+        },
+    }, true, true);
+    
+    console.log(window);
+    
+    
+//    $('.lazy1').cssAnimation({
+//        time: 2000,
+//        delay: 0,
+//        timing: 'back',//'ease-out',
+//        css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+//            opacity: 0,
+//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '80deg'],//
+//            skew: [-15, -15],
+//            scale: [2, 2],
+//            origin: ['30', '30']
+//        },
+//        repe: false,//重复动画
+//    });
     
     
 //    $('.lazy1').lazing({

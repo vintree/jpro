@@ -160,20 +160,30 @@
 </div>
 
     <script src="../js/lib/jquery.min.js"></script>
-<script src="../js/src/lazing.js"></script>
+<script src="../js/src/lazy.js"></script>
 </body>
 </html>
 <script>
-    $('.index-nav-li').lazing({
-            time: 1000,//执行时间
-            delay: 0,//延迟时间
-            offset: '100',//偏移量
-            orien: 'left',//方向
-            lazy: true,//是否支持赖加载
-            repe: true,//是否支持重复
-            startOpacity: 0.3,//起始隐藏
-            endOpacity: 0.8//结束隐藏
-    });
+    
+    
+    
+    
+    $('.index-nav-li').lazing(true, true);
+    
+    
+    
+    
+    
+//    $('.index-nav-li').lazing({
+//            time: 1000,//执行时间
+//            delay: 0,//延迟时间
+//            offset: '100',//偏移量
+//            orien: 'left',//方向
+//            lazy: true,//是否支持赖加载
+//            repe: true,//是否支持重复
+//            startOpacity: 0.3,//起始隐藏
+//            endOpacity: 0.8//结束隐藏
+//    });
     
     
     $('.index-use-imgbox').lazing({
