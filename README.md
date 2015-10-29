@@ -15,7 +15,7 @@
 ####   「希望」欢迎大神的加入   ####
 *   能css3制作出icon效果的css大神
 *   对requestAnimationframe有所研究
-*   对repaint reflow机制和main thred、compositor thread性能关系有所研究
+*   对repaint、reflow机制和main thred、compositor thread性能关系有所研究
 *   对浏览器引擎机制、渲染机制、线程机制有所研究
 
 ####   「注意」请斟酌使用该组件   ####
