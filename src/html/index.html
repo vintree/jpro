@@ -20,11 +20,13 @@
         
         <span class="lazy2" style="">hello world2</span>
         <span class="lazy" style="color: red;">hello world-111</span>
-<!--
+        
+        
 		<div style="position: relative;height: 3000px;">
 			<div id="div" style='position: absolute; top: 1500px; left: 0; width: 50px; height: 50px; background-color: red;'></div>
 		</div>
--->
+        
+        
         
         <div>
             <span>
@@ -54,10 +56,28 @@
             scale: [2, 2],
             origin: ['30', '30']
         },
-        lazy: false,
+        lazy: true,
         repe: false,
     });
     
+    $('#div').sdAnimation({
+        time: 2000,
+        delay: 0,
+        ease: 'ease-back',//'ease-out',
+        css: {
+            width: '150',
+            height: '150',
+            'background-color': 'blue',
+            opacity: 1,
+            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+            rotate: [.6, 1, .6, '80deg'],//
+            skew: [-15, -15],
+            scale: [2, 2],
+            origin: ['30', '30']
+        },
+        lazy: true,
+        repe: false,
+    });
     
 //    console.log($('div>span>#lazy1'));
     

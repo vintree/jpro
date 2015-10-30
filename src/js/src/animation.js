@@ -1,4 +1,5 @@
 function tool() {}
+function lazy() {}
 tool.initEase = function(data) {
     var ease = {
             'linear': 'linear',
@@ -100,29 +101,29 @@ tool.origin = function(data) {
     return origin;
 }
     
-tool.factory = function(dom, options) {  
+tool.animation = function(dom, options) {  
     var ease = '',
         transition = '',
         transform = '',
         origin = '',
+        css = options.css,
         str;
     if(!!options) {
         ease = this.initEase(options.ease);
         transition = this.transition(ease, options.time, options.delay);
-        transform = this.transform(options.css);
-        delete options.css.translate;
-        delete options.css.rotate;
-        delete options.css.skew;
-        delete options.css.scale;
-        delete options.css.origin;
+        transform = this.transform(css);
+//        delete css.translate;
+//        delete css.rotate;
+//        delete css.skew;
+//        delete css.scale;
+//        delete css.origin;
         str = transition + dom.attr('style') + ';';
         if(!$.sdIsBlock(dom)) {
             str += 'display: inline-block;';
-        }
-        
+        }        
         dom.attr('style', str);//设置transition     
         setTimeout(function() {//设置基本css属性
-            dom.css(options.css);
+            dom.css(css);
         }, 60/1000);
         setTimeout(function() {//设置transform属性
             dom.attr('style', dom.attr('style') + transform);
@@ -130,15 +131,93 @@ tool.factory = function(dom, options) {
     }
 }
 
+lazy.register = function(dom, options) {
+    var sdDataLazy = {},
+        sdDataOptions = {},
+        ouid = $.sdUuid(6);
+    $.sdData.lazy[$.sdUuid(6)] = {
+        dom: $(dom),
+        repe: options.repe || false,
+        css: $(dom).attr('style'),
+        view: false,
+        ouid:  ouid
+    }
+    delete options.lazy;
+    delete options.repe;
+    $.sdData.lazyOptions[ouid] = options;
+    
+    
+//    console.log($.sdData.lazy);
+//    console.log($.sdData.lazyOptions);
+}
+
+lazy.lazy = function() {
+    var viewH = $(window).height(),
+        viewT = $(window).scrollTop(),
+        lazy,
+        clienH,
+        clienW,
+        clienT,
+        clienL,
+        obj,
+        dom,
+        options;
+        for(uuid in $.sdData.lazy) {
+            obj = $.sdData.lazy[uuid];
+            dom = obj.dom;
+            clienH = dom.height();
+            clienW = dom.width();
+            clienT = dom.scrollTop() || dom[0].offsetTop;
+            clienL = dom.scrollLeft() || dom[0].offsetLeft;
+            if(obj.view) {//在视口中
+                if(( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 )) {//在视口中
+                    obj.view = true;
+                } else {//不在视口
+                    obj.view = false;        
+                }
+            } else {//不在视口中
+                if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {
+                    obj.view = true;
+                    options = $.sdData.lazyOptions[obj.ouid];
+                    tool.animation(dom, options);
+                    if(!obj.repe) {//没有重复
+                        delete $.sdData.lazy[uuid];
+                    }
+                }
+            }
+        }
+}
+
+lazy.scroll = function() {
+    lazy.lazy();
+    $(window).on('scroll', function() {
+        lazy.lazy();
+    });
+}
+
 $.fn.extend({
     sdAnimation: function(options) {
+        var length = this.length,
+            i = 0;
         if(typeof options === 'object') {
-            tool.factory(this, options);
+            if(options.lazy) {
+                for(;length--;) {
+                    lazy.register(this[length], options);
+                }
+                lazy.scroll();
+            }
+            else {
+                tool.animation(this, options);
+            }
         }
     }
 });
 
 $.extend({
+    sdData: {
+        lazy: {},
+        lazyOptions: {}
+    },
     sdPrivateProperty: function(name, data) {//浏览器扩展名
         var extend = $.sdKernel(),
             str = ''+ name +': ' + data,
@@ -176,6 +255,22 @@ $.extend({
             return true;
         }
         return false;
+    },
+    sdUuid: function(n) {
+        var chars = '_ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz',
+            l = chars.length,
+            i = 0,
+            s = '',
+            str = '',
+            gt = new Date().getTime() + '';
+        for(; i < n; i++) {
+            s += chars.charAt( Math.floor(Math.random()*l) );
+        }
+        s += gt.substring(gt.length - n);
+        for(i = 0; i < n; i++) {
+            str += s.charAt(Math.floor(Math.random()*(2*n)))
+        }
+        return str;
     }
 });
 
