@@ -1,11 +1,49 @@
-/**
-    2015-10-25
-    lazing V 0.21
-    wuguzix@foxmail.com
-*/
-$.fn.lazing = function(options, lazy, repe) {
-    var DOM = this,
-        stor = 'lazing_register',
+$.fn.sky = function(group, options, lazy, repe, fn) {
+    
+    console.log(typeof group);
+    console.log(typeof options);
+    console.log(typeof lazy);
+    console.log(typeof repe);
+    console.log(typeof fn);
+    
+    
+    if(typeof group === 'string') {
+        if(typeof options === 'object') {
+            if(typeof lazy === 'boo') {
+                if(typeof repe === 'boo') {
+                    if(typeof fn === 'function'){
+                        
+                    }
+                }
+            }
+        }
+    }
+    else if(typeof group === 'object') {
+        
+    }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        var stor = 'lazing_register',
         lazing = {
         lets: {
             time: 1000,//执行时间
@@ -190,9 +228,6 @@ $.fn.lazing = function(options, lazy, repe) {
             this.hide();
             this.unlazy();
             this.srcoll();
-            
-//            console.log(options, lazy, repe);
-            
         }
     };
     lazing.init(options);

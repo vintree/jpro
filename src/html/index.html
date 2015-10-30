@@ -3,17 +3,20 @@
 	<head>
         <meta charset="UTF-8">
         <script src="../js/lib/jquery.min.js"></script>
-        <script src="../js/src/storage.js"></script>
-        <script src="../js/src/lazy.js"></script>
-        <script src="../js/src/cssAnimation.js"></script>
+        <script src="../js/src/animation.js"></script>
+<!--        <script src="../js/src/storage.js"></script>-->
+<!--        <script src="../js/src/lazy.js"></script>-->
+<!--        <script src="../js/src/cssAnimation.js"></script>-->
 	</head>
 	<body>
         <span>阿门：</span>
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
+<!--
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
+-->
         
         <span class="lazy2" style="">hello world2</span>
         <span class="lazy" style="color: red;">hello world-111</span>
@@ -36,62 +39,81 @@
 
 <script>
     
-    
-    console.log($('div>span>#lazy1'));
-    
-    
-    $('.lazy1').lazing({
+    $('.lazy1').sdAnimation({
         time: 2000,
         delay: 0,
-        timing: 'back',//'ease-out',
+        ease: 'ease-back',//'ease-out',
         css: {
             width: '150',
             height: '150',
             'background-color': 'blue',
-            opacity: 0,
+            opacity: 1,
             translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
             rotate: [.6, 1, .6, '80deg'],//
             skew: [-15, -15],
             scale: [2, 2],
             origin: ['30', '30']
         },
-    }, true, true);
+        lazy: false,
+        repe: false,
+    });
     
-    $('.lazy2').lazing({
-        time: 2000,
-        delay: 0,
-        timing: 'back',//'ease-out',
-        css: {
-            width: '150',
-            height: '150',
-            'background-color': 'blue',
-            opacity: 0,
-            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-            rotate: [.6, 1, .6, '80deg'],//
-            skew: [-15, -15],
-            scale: [2, 2],
-            origin: ['30', '30']
-        },
-    }, true, true);
     
-     $('.lazy').lazing({
-        time: 2000,
-        delay: 0,
-        timing: 'back',//'ease-out',
-        css: {
-            width: '150',
-            height: '150',
-            'background-color': 'blue',
-            opacity: 0,
-            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-            rotate: [.6, 1, .6, '80deg'],//
-            skew: [-15, -15],
-            scale: [2, 2],
-            origin: ['30', '30']
-        },
-    }, true, true);
+//    console.log($('div>span>#lazy1'));
     
-    console.log(window);
+    
+//    $('.lazy1').lazing({
+//        time: 2000,
+//        delay: 0,
+//        timing: 'back',//'ease-out',
+//        css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+//            opacity: 0,
+//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '80deg'],//
+//            skew: [-15, -15],
+//            scale: [2, 2],
+//            origin: ['30', '30']
+//        },
+//    }, true, true);
+//    
+//    $('.lazy2').lazing({
+//        time: 2000,
+//        delay: 0,
+//        timing: 'back',//'ease-out',
+//        css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+//            opacity: 0,
+//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '80deg'],//
+//            skew: [-15, -15],
+//            scale: [2, 2],
+//            origin: ['30', '30']
+//        },
+//    }, true, true);
+//    
+//     $('.lazy').lazing({
+//        time: 2000,
+//        delay: 0,
+//        timing: 'back',//'ease-out',
+//        css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+//            opacity: 0,
+//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '80deg'],//
+//            skew: [-15, -15],
+//            scale: [2, 2],
+//            origin: ['30', '30']
+//        },
+//    }, true, true);
+    
+//    console.log(window);
     
     
 //    $('.lazy1').cssAnimation({
