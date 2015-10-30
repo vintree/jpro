@@ -101,7 +101,7 @@ tool.origin = function(data) {
     return origin;
 }
     
-tool.animation = function(dom, options) {  
+tool.animation = function(dom, options) {//最底层动画
     var ease = '',
         transition = '',
         transform = '',
@@ -112,16 +112,11 @@ tool.animation = function(dom, options) {
         ease = this.initEase(options.ease);
         transition = this.transition(ease, options.time, options.delay);
         transform = this.transform(css);
-//        delete css.translate;
-//        delete css.rotate;
-//        delete css.skew;
-//        delete css.scale;
-//        delete css.origin;
         str = transition + dom.attr('style') + ';';
         if(!$.sdIsBlock(dom)) {
             str += 'display: inline-block;';
         }        
-        dom.attr('style', str);//设置transition     
+        dom.attr('style', str);//设置transition
         setTimeout(function() {//设置基本css属性
             dom.css(css);
         }, 60/1000);
@@ -131,27 +126,17 @@ tool.animation = function(dom, options) {
     }
 }
 
-lazy.register = function(dom, options) {
-    var sdDataLazy = {},
-        sdDataOptions = {},
-        ouid = $.sdUuid(6);
+lazy.register = function(dom, ouid) {//注册：1.对象
     $.sdData.lazy[$.sdUuid(6)] = {
         dom: $(dom),
-        repe: options.repe || false,
+        repe: false,
         css: $(dom).attr('style'),
         view: false,
         ouid:  ouid
     }
-    delete options.lazy;
-    delete options.repe;
-    $.sdData.lazyOptions[ouid] = options;
-    
-    
-//    console.log($.sdData.lazy);
-//    console.log($.sdData.lazyOptions);
 }
 
-lazy.lazy = function() {
+lazy.lazy = function() {//懒加载
     var viewH = $(window).height(),
         viewT = $(window).scrollTop(),
         lazy,
@@ -188,27 +173,61 @@ lazy.lazy = function() {
         }
 }
 
-lazy.scroll = function() {
+lazy.scroll = function() {//监控
     lazy.lazy();
     $(window).on('scroll', function() {
         lazy.lazy();
     });
 }
 
+lazy.config = function(dom, options, ouid) {//配置dom，options
+    var length = dom.length,
+        ouid;
+    if(ouid) {
+        for(;length--;) {
+            lazy.register(dom[length], ouid);
+        }
+    }
+    else {
+        for(;length--;) {
+            ouid = $.sdGroup(options);//注册options
+            lazy.register(dom[length], ouid);//注册dom
+        }
+    }
+}
+
+lazy.animation = function(dom, options, ouid) {//过滤lazy
+    if(!!options) {
+        if(options && options.lazy) {
+            lazy.config(dom, options, ouid);//配置dom，options
+            lazy.scroll();
+        }
+        else {
+            tool.animation(dom, options);//最底层动画
+        }
+    }
+}
+
 $.fn.extend({
-    sdAnimation: function(options) {
-        var length = this.length,
-            i = 0;
-        if(typeof options === 'object') {
-            if(options.lazy) {
-                for(;length--;) {
-                    lazy.register(this[length], options);
+    sdAnimation: function(group, options) {
+        var length = arguments.length,
+            i = 0,
+            ouid;
+        if(!!length) {
+            if(length === 1) {
+                if(typeof group === 'object') {
+                    options = group;
                 }
-                lazy.scroll();
+                else if(typeof group === 'string') {
+                    ouid = group;
+                    options = $.sdData.lazyOptions[group];
+                }
             }
-            else {
-                tool.animation(this, options);
+            else if(length === 2) {
+                ouid = group;
+                $.sdGroup(group, options);
             }
+            lazy.animation(this, options, ouid);
         }
     }
 });
@@ -271,16 +290,24 @@ $.extend({
             str += s.charAt(Math.floor(Math.random()*(2*n)))
         }
         return str;
+    },
+    sdGroup: function(group, options) {
+        var length = arguments.length,
+            ouid;
+        if(!!length) {
+            if(length === 1 && typeof group === 'object') {
+                options = group;
+                ouid = $.sdUuid(6);
+                $.sdData.lazyOptions[ouid] = options;
+                return ouid;
+            }
+            else if(length === 2 && typeof group === 'string' && typeof options === 'object'){
+                $.sdData.lazyOptions[group] = options;
+                return group;
+            }
+        }
+    },
+    sdCleanGroup: function(group) {
+        delete $.sdData.lazyOptions[group];
     }
 });
-
-
-
-
-
-
-
-
-
-
-

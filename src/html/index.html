@@ -40,8 +40,12 @@
 </html>
 
 <script>
-    
-    $('.lazy1').sdAnimation({
+    /*
+        $.sdGroup(group,options);
+        $.sdCleanGroup(optiosns);
+        $('query').sdAnimation(group || options);
+    */
+    var s = $.sdGroup('master', {
         time: 2000,
         delay: 0,
         ease: 'ease-back',//'ease-out',
@@ -60,24 +64,51 @@
         repe: false,
     });
     
-    $('#div').sdAnimation({
-        time: 2000,
-        delay: 0,
-        ease: 'ease-back',//'ease-out',
-        css: {
-            width: '150',
-            height: '150',
-            'background-color': 'blue',
-            opacity: 1,
-            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-            rotate: [.6, 1, .6, '80deg'],//
-            skew: [-15, -15],
-            scale: [2, 2],
-            origin: ['30', '30']
-        },
-        lazy: true,
-        repe: false,
-    });
+    
+    $('#div').sdAnimation('master');
+    
+//    $.sdCleanGroup('master');
+    
+    $('.lazy1').sdAnimation('master');
+    
+    
+//    $('.lazy1').sdAnimation({
+//        time: 2000,
+//        delay: 0,
+//        ease: 'ease-back',//'ease-out',
+//        css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+//            opacity: 1,
+//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '80deg'],//
+//            skew: [-15, -15],
+//            scale: [2, 2],
+//            origin: ['30', '30']
+//        },
+//        lazy: true,
+//        repe: false,
+//    });
+    
+//    $('#div').sdAnimation({
+//        time: 2000,
+//        delay: 0,
+//        ease: 'ease-back',//'ease-out',
+//        css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+//            opacity: 1,
+//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '80deg'],//
+//            skew: [-15, -15],
+//            scale: [2, 2],
+//            origin: ['30', '30']
+//        },
+//        lazy: true,
+//        repe: false,
+//    });
     
 //    console.log($('div>span>#lazy1'));
     
