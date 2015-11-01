@@ -101,7 +101,7 @@ tool.origin = function(data) {
     return origin;
 }
     
-tool.animation = function(dom, options) {//最底层动画
+tool.animation = function(dom, options) {//底层动画接口
     var ease = '',
         transition = '',
         transform = '',
@@ -113,9 +113,12 @@ tool.animation = function(dom, options) {//最底层动画
         transition = this.transition(ease, options.time, options.delay);
         transform = this.transform(css);
         str = transition + dom.attr('style') + ';';
-        if(!$.sdIsBlock(dom)) {
+        if($.sdIsBlock(dom)) {
+            str += 'display: block;';
+        }
+        else {
             str += 'display: inline-block;';
-        }        
+        }
         dom.attr('style', str);//设置transition
         setTimeout(function() {//设置基本css属性
             dom.css(css);
@@ -124,6 +127,14 @@ tool.animation = function(dom, options) {//最底层动画
             dom.attr('style', dom.attr('style') + transform);
         }, 60/1000);
     }
+}
+
+lazy.scroll = function() {//监控
+    lazy.lazy();
+    $(window).on('scroll', function() {
+        tool.detection();
+        lazy.lazy();
+    });
 }
 
 lazy.register = function(dom, ouid) {//注册：1.对象
@@ -146,7 +157,7 @@ lazy.lazy = function() {//懒加载
         clienL,
         obj,
         dom,
-        options;
+        options;    
         for(uuid in $.sdData.lazy) {
             obj = $.sdData.lazy[uuid];
             dom = obj.dom;
@@ -171,13 +182,6 @@ lazy.lazy = function() {//懒加载
                 }
             }
         }
-}
-
-lazy.scroll = function() {//监控
-    lazy.lazy();
-    $(window).on('scroll', function() {
-        lazy.lazy();
-    });
 }
 
 lazy.config = function(dom, options, ouid) {//配置dom，options
@@ -208,26 +212,86 @@ lazy.animation = function(dom, options, ouid) {//过滤lazy
     }
 }
 
+tool.detection = function() {
+    var data = $.sdData.lazyOn,
+        length = data.length,
+        obj,
+        doms;
+    for(;length--;) {//监控对象
+        obj = $.sdData.lazyOn[length];
+        doms = obj.doms;
+        var newThisObjLength = $(obj.bindDom).find(obj.query).length;
+        for(;newThisObjLength--;) {
+            
+            if(obj.thisDom[newThisObjLength] === $(obj.bindDom).find(obj.query)[newThisObjLength]) {
+                console.log('一样');
+                console.log(obj.doms.length);
+            }
+            else {
+                doms[obj.doms.length] = {
+                    dom: $(obj.bindDom).find(obj.query)[newThisObjLength],
+                    repe: false,
+                    css: $(obj.bindDom).find(obj.query).eq(newThisObjLength).attr('style'),
+                    view: false,
+                }
+                doms.length++;
+                obj.thisDom = $(obj.bindDom).find(obj.query);
+            }
+        }
+    }
+    
+}
+
+tool.on = function(elem, query, options) {//底层绑定接口
+    var length = $.sdData.lazyOn.length || 0,
+        thisDom = elem.find(query),
+        findLength = thisDom.length,//子元素长度
+        obj = {},//子元素集
+        data = $.sdData.lazyOn;
+    
+    obj.length = findLength;
+    for(;findLength--;) {
+        obj[findLength] = {
+            dom: thisDom.eq(findLength),
+            repe: false,
+            css: thisDom.eq(findLength).attr('style'),
+            view: false,
+        }
+    }
+    
+        data[length] = {
+            bindDom: elem,
+            thisDom: elem.find(query),
+            query: query,
+            ouid: options,
+            doms: obj
+        };
+        data.length = length + 1;
+    $.sdData.lazyOn = data;
+    console.log($.sdData.lazyOn);
+}
+
+tool.onConfig = function() {
+    
+}
+
 $.fn.extend({
-    sdAnimation: function(group, options) {
-        var length = arguments.length,
-            i = 0,
-            ouid;
+    sdAnimation: function(group) {
+        var length = arguments.length;
+        if(length === 1) {
+            //options = group;
+            group = typeof group === 'object' ? group : $.sdData.lazyOptions[group];
+            lazy.animation(this, group);//(elem, options)
+        }
+    },
+    
+    sdOn: function(group, query) {
+//        console.log($(document).scrollTop(), $(document).scrollLeft());
+        
+        var length = arguments.length;
         if(!!length) {
-            if(length === 1) {
-                if(typeof group === 'object') {
-                    options = group;
-                }
-                else if(typeof group === 'string') {
-                    ouid = group;
-                    options = $.sdData.lazyOptions[group];
-                }
-            }
-            else if(length === 2) {
-                ouid = group;
-                $.sdGroup(group, options);
-            }
-            lazy.animation(this, options, ouid);
+            group = typeof group === 'object' ?  $.sdGroup(group) : group;
+            tool.on(this, query, group);//(elem, query, group)
         }
     }
 });
@@ -235,7 +299,8 @@ $.fn.extend({
 $.extend({
     sdData: {
         lazy: {},
-        lazyOptions: {}
+        lazyOptions: {},
+        lazyOn: {}
     },
     sdPrivateProperty: function(name, data) {//浏览器扩展名
         var extend = $.sdKernel(),
@@ -309,5 +374,16 @@ $.extend({
     },
     sdCleanGroup: function(group) {
         delete $.sdData.lazyOptions[group];
+    },
+//    sdGetOption: function(group) {
+//        if(typeof group === 'string') {//group
+//            group = $.sdData.lazyOptions[group];
+//        }
+//        return group;
+//    },
+    sdGetGroup: function(group) {
+        if(typeof group === 'object') {
+//            group = 
+        }
     }
 });
