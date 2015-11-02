@@ -213,31 +213,48 @@ lazy.animation = function(dom, options, ouid) {//过滤lazy
 }
 
 tool.detection = function() {
-    var data = $.sdData.lazyOn,
+    var i,
+        data = $.sdData.lazyOn,
         length = data.length,
-        obj,
-        doms;
+        h_length,
+        obj,//容器对象指针
+        doms,//doms对象指针
+        c_thisDom = {},//thisDom副本
+        c_thisDomLength,
+        h_thisDom;
     for(;length--;) {//监控对象
         obj = $.sdData.lazyOn[length];
+        c_thisDom = $.extend({}, obj.thisDom);
+        c_thisDomLength = c_thisDom.length;
+        h_thisDom = $(obj.bindDom).find(obj.query);
         doms = obj.doms;
-        var newThisObjLength = $(obj.bindDom).find(obj.query).length;
-        for(;newThisObjLength--;) {
-            
-            if(obj.thisDom[newThisObjLength] === $(obj.bindDom).find(obj.query)[newThisObjLength]) {
-                console.log('一样');
-                console.log(obj.doms.length);
+        h_length = $(obj.bindDom).find(obj.query).length;
+        for(var j = 0; j <h_length; j++) {//html中DOM长度   
+            var tag = 0;//0 - 找不到， 1 - 找到
+            for(i = 0; i < c_thisDomLength; i++) {//存储长度
+                if(c_thisDom[i]) {
+                    if(c_thisDom.eq(i).is(h_thisDom.eq(j))) {//找到了dom
+                        tag = 1;
+                        delete c_thisDom[i];
+                        break;
+                    }
+                    else {//找不到dom
+                        tag = 0;
+                    }
+                }
             }
-            else {
-                doms[obj.doms.length] = {
-                    dom: $(obj.bindDom).find(obj.query)[newThisObjLength],
+            if(tag === 0) {
+                doms[doms.length] = {
+                    css: h_thisDom.eq(j).attr('style'),
+                    dom: h_thisDom.eq(j),
                     repe: false,
-                    css: $(obj.bindDom).find(obj.query).eq(newThisObjLength).attr('style'),
-                    view: false,
+                    view: true
                 }
                 doms.length++;
-                obj.thisDom = $(obj.bindDom).find(obj.query);
             }
         }
+        obj.thisDom = h_thisDom;
+        console.log(obj);
     }
     
 }
@@ -248,25 +265,23 @@ tool.on = function(elem, query, options) {//底层绑定接口
         findLength = thisDom.length,//子元素长度
         obj = {},//子元素集
         data = $.sdData.lazyOn;
-    
     obj.length = findLength;
     for(;findLength--;) {
         obj[findLength] = {
             dom: thisDom.eq(findLength),
             repe: false,
             css: thisDom.eq(findLength).attr('style'),
-            view: false,
+            view: false
         }
     }
-    
-        data[length] = {
-            bindDom: elem,
-            thisDom: elem.find(query),
-            query: query,
-            ouid: options,
-            doms: obj
-        };
-        data.length = length + 1;
+    data[length] = {
+        bindDom: elem,
+        thisDom: elem.find(query),
+        query: query,
+        ouid: options,
+        doms: obj
+    };
+    data.length = length + 1;
     $.sdData.lazyOn = data;
     console.log($.sdData.lazyOn);
 }
@@ -385,5 +400,8 @@ $.extend({
         if(typeof group === 'object') {
 //            group = 
         }
+    },
+    sdDetection: function() {
+        tool.detection();
     }
 });

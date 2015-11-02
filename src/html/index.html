@@ -10,6 +10,7 @@
 	</head>
 	<body>
         <button class="add">添加div</button>
+        <button class="detection">监控</button>
 <!--        <span>阿门：</span>-->
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
 <!--
@@ -48,7 +49,9 @@
 </html>
 <script>
     
-    
+    $('.detection').on('click', function() {
+        $.sdDetection();
+    })
     $('.add').on('click', function() {
         
 //        $('.lazy2').children().eq(0).text('dasdad');
