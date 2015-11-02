@@ -11,6 +11,7 @@
 	<body>
         <button class="add">添加div</button>
         <button class="detection">监控</button>
+        <button class="timestram">时间戳</button>
 <!--        <span>阿门：</span>-->
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
 <!--
@@ -53,15 +54,12 @@
         $.sdDetection();
     })
     $('.add').on('click', function() {
-        
-//        $('.lazy2').children().eq(0).text('dasdad');
-        
-        $('.lazy2').append('<div class="on">on2</div>');
-        
-//        console.log($('.lazy2').find('.on'));
-//        console.log($.sdData.lazyOn);
-        
+        $('.lazy2').append('<div class="on">on2</div>');        
     });
+    $('.timestram').on('click', function() {
+        $.sdScroll();
+    });
+    
     
     $('.lazy2').sdOn({
         time: 2000,
@@ -81,6 +79,26 @@
         lazy: true,
         repe: false,
     }, '.on');
+    
+//    $('.lazy1').sdOn({
+//        time: 2000,
+//        delay: 0,
+//        ease: 'ease-back',//'ease-out',
+//        css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+//            opacity: 1,
+//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '80deg'],//
+//            skew: [-15, -15],
+//            scale: [2, 2],
+//            origin: ['30', '30']
+//        },
+//        lazy: true,
+//        repe: false,
+//    }, '.on');
+    
     
     $('.lazy1').sdAnimation({
         time: 2000,
