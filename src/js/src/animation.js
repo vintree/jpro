@@ -163,7 +163,10 @@ lazy.scrollDetection = function(dom) {//筛选dom
         clienW = dom.width(),
         clienT = dom.scrollTop() || dom[0].offsetTop,
         clienL = dom.scrollLeft() || dom[0].offsetLeft;
-    if(( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 )) {//在视口中
+    
+//    console.log((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0);
+    
+    if((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {//在视口中
         return true;
     }
     return false;
@@ -192,6 +195,7 @@ lazy.container = function() {//筛选容器
     for(var i = 0; i < data.length; i++) {
         var _data = data[i];
         var _dom = _data.bindDom;
+//        console.log(_dom.height());
         if(lazy.scrollDetection(_dom)) {
             options = $.sdData.lazyOptions[_data.ouid];
             lazy.domsContainer(_data.doms, options);
@@ -199,19 +203,23 @@ lazy.container = function() {//筛选容器
     }
 }
 
+lazy.pack = function() {
+    lazy.lazy();
+    tool.detection();
+    lazy.container();
+}
+
 lazy.scroll = function() {//监控
     var data = $.sdData.lazyOn,
         timestamp;
-    lazy.lazy();
+    lazy.pack();
     $(window).on('scroll', function() {
         var data = $.sdData.lazyOn,
             timestamp;
         timestamp = (new Date).getTime();
         if( timestamp - data.timestamp > 300 ) {
             $.sdData.lazyOn.timestamp = timestamp;
-            lazy.lazy();
-            tool.detection();
-            lazy.container();
+            lazy.pack();
         }
     });
 }
@@ -227,40 +235,41 @@ lazy.register = function(dom, ouid) {//注册：1.对象
 }
 
 lazy.lazy = function() {//懒加载
-    var viewH = $(window).height(),
-        viewT = $(window).scrollTop(),
-        lazy,
-        clienH,
-        clienW,
-        clienT,
-        clienL,
-        obj,
-        dom,
-        options;    
-        for(uuid in $.sdData.lazy) {
-            obj = $.sdData.lazy[uuid];
-            dom = obj.dom;
-            clienH = dom.height();
-            clienW = dom.width();
-            clienT = dom.scrollTop() || dom[0].offsetTop;
-            clienL = dom.scrollLeft() || dom[0].offsetLeft;
-            if(obj.view) {//在视口中
-                if(( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 )) {//在视口中
-                    obj.view = true;
-                } else {//不在视口
-                    obj.view = false;        
-                }
-            } else {//不在视口中
-                if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {
-                    obj.view = true;
-                    options = $.sdData.lazyOptions[obj.ouid];
-                    tool.animation(dom, options);
-                    if(!obj.repe) {//没有重复
-                        delete $.sdData.lazy[uuid];
-                    }
+    var 
+    viewH = $(window).height(),
+    viewT = $(window).scrollTop(),
+    lazy,
+    clienH,
+    clienW,
+    clienT,
+    clienL,
+    obj,
+    dom,
+    options;    
+    for(uuid in $.sdData.lazy) {
+        obj = $.sdData.lazy[uuid];
+        dom = obj.dom;
+        clienH = dom.height();
+        clienW = dom.width();
+        clienT = dom.scrollTop() || dom[0].offsetTop;
+        clienL = dom.scrollLeft() || dom[0].offsetLeft;
+        if(obj.view) {//在视口中
+            if(( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 )) {//在视口中
+                obj.view = true;
+            } else {//不在视口
+                obj.view = false;        
+            }
+        } else {//不在视口中
+            if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {
+                obj.view = true;
+                options = $.sdData.lazyOptions[obj.ouid];
+                tool.animation(dom, options);
+                if(!obj.repe) {//没有重复
+                    delete $.sdData.lazy[uuid];
                 }
             }
         }
+    }
 }
 
 lazy.config = function(dom, options, ouid) {//配置dom，options
@@ -351,34 +360,33 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
     var length = $.sdData.lazyOn.length || 0,
         thisDom = elem.find(query),
         findLength = thisDom.length,//子元素长度
-//        obj = {length: 0},//子元素集
-        arr = []
+        arr = [],
         data = $.sdData.lazyOn,
         options = $.sdData.lazyOptions[ouid];
+    
     if(!!length) {//防止重复绑定
         for(var i = 0; i < length; i++ ) {
-            if(elem.is(data[i].bindDom)){
+            if(elem.is(data[i].bindDom)) {
                 return;
             }
         }
     }
-    else {        
-        for(;findLength--;) {
-            arr = tool.doms(thisDom.eq(findLength), options, arr);
-        }
-        data[length] = {
-            bindDom: elem,
-            thisDom: elem.find(query),
-            query: query,
-            ouid: ouid,
-            doms: arr
-        };
-        data.length = length + 1;
-        data.timestamp = (new Date).getTime();
-        data.tag = 1;
-        $.sdData.lazyOn = data;
-        console.log($.sdData.lazyOn);
+    
+    for(;findLength--;) {
+        arr = tool.doms(thisDom.eq(findLength), options, arr);
     }
+    data[length] = {
+        bindDom: elem,
+        thisDom: elem.find(query),
+        query: query,
+        ouid: ouid,
+        doms: arr
+    };
+    data.length = length + 1;
+    data.timestamp = (new Date).getTime();
+    data.tag = 1;
+    $.sdData.lazyOn = data;
+    console.log($.sdData.lazyOn);
 }
 
 $.fn.extend({
@@ -395,7 +403,7 @@ $.fn.extend({
         var length = arguments.length;
         if(!!length) {
             group = typeof group === 'object' ?  $.sdGroup(group) : group;
-            tool.on(this, query, group);//(elem, query, group)
+            tool.on(this, query, group, true);//(elem, query, group)
         }
     }
 });
@@ -476,9 +484,9 @@ $.extend({
             }
         }
     },
-    sdCleanGroup: function(group) {
-        delete $.sdData.lazyOptions[group];
-    },
+//    sdCleanGroup: function(group) {
+//        delete $.sdData.lazyOptions[group];
+//    },
 //    sdGetOption: function(group) {
 //        if(typeof group === 'string') {//group
 //            group = $.sdData.lazyOptions[group];
@@ -493,28 +501,28 @@ $.extend({
     sdDetection: function() {
         tool.detection();
     },
-    sdScroll: function() {
-        var data = $.sdData.lazyOn,
-            timestamp;
-        timestamp = (new Date).getTime();
-        if(data.tag === 1) {
-            if( timestamp - data.timestamp > 1500 ) {
-                tool.detection();
-                lazy.lazy();
-                $.sdData.lazyOn.timestamp = timestamp;
-                $.sdData.lazyOn.tag = 2;
-            }
-        }
-        else {
-            console.log((new Date).getTime() - data.timestamp);
-            if( (new Date).getTime() - data.timestamp > 750 ) {
-                console.log('fsaf');
-                tool.detection();
-                lazy.lazy();
-                console.log(data);
-                $.sdData.lazyOn.timestamp = timestamp;
-                $.sdData.lazyOn.tag = 1;
-            }
-        }
-    }
+//    sdScroll: function() {
+//        var data = $.sdData.lazyOn,
+//            timestamp;
+//        timestamp = (new Date).getTime();
+//        if(data.tag === 1) {
+//            if( timestamp - data.timestamp > 1500 ) {
+//                tool.detection();
+//                lazy.lazy();
+//                $.sdData.lazyOn.timestamp = timestamp;
+//                $.sdData.lazyOn.tag = 2;
+//            }
+//        }
+//        else {
+//            console.log((new Date).getTime() - data.timestamp);
+//            if( (new Date).getTime() - data.timestamp > 750 ) {
+//                console.log('fsaf');
+//                tool.detection();
+//                lazy.lazy();
+//                console.log(data);
+//                $.sdData.lazyOn.timestamp = timestamp;
+//                $.sdData.lazyOn.tag = 1;
+//            }
+//        }
+//    }
 });
