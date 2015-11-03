@@ -115,8 +115,7 @@ tool.animation = function(dom, options) {//底层动画接口
         str = transition + dom.attr('style') + ';';
         if($.sdIsBlock(dom)) {
             str += 'display: block;';
-        }
-        else {
+        } else {
             str += 'display: inline-block;';
         }
         dom.attr('style', str);//设置transition
@@ -129,14 +128,13 @@ tool.animation = function(dom, options) {//底层动画接口
     }
 }
 
-tool.onAnimation = function(data, options) {
+tool.onAnimation = function(dom, options) {
     var ease = '',
         transition = '',
         transform = '',
         origin = '',
         css = options.css,
-        str,
-        dom = data.dom;
+        str;
     if(!!options) {
         ease = this.initEase(options.ease);
         transition = this.transition(ease, options.time, options.delay);
@@ -158,6 +156,49 @@ tool.onAnimation = function(data, options) {
     }
 }
 
+lazy.scrollDetection = function(dom) {//筛选dom
+    var viewH = $(window).height(),
+        viewT = $(window).scrollTop(),
+        clienH = dom.height(),
+        clienW = dom.width(),
+        clienT = dom.scrollTop() || dom[0].offsetTop,
+        clienL = dom.scrollLeft() || dom[0].offsetLeft;
+    if(( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 )) {//在视口中
+        return true;
+    }
+    return false;
+}
+
+lazy.domsContainer = function(doms, options) {//筛选子dom
+    var i,
+        length = doms.length;
+    for(i = 0; i < length; i++) {
+        if(doms[i]) {
+            if(lazy.scrollDetection(doms[i].dom)) {
+                tool.onAnimation(doms[i].dom, options);
+                if(!options.repe) {//没有重复
+                    doms.splice(i, 1);
+                    lazy.domsContainer(doms, options);
+                }
+            }
+        }
+    }
+}
+
+lazy.container = function() {//筛选容器
+    //容器配置
+    var data = $.sdData.lazyOn,
+        options;
+    for(var i = 0; i < data.length; i++) {
+        var _data = data[i];
+        var _dom = _data.bindDom;
+        if(lazy.scrollDetection(_dom)) {
+            options = $.sdData.lazyOptions[_data.ouid];
+            lazy.domsContainer(_data.doms, options);
+        }
+    }
+}
+
 lazy.scroll = function() {//监控
     var data = $.sdData.lazyOn,
         timestamp;
@@ -169,39 +210,8 @@ lazy.scroll = function() {//监控
         if( timestamp - data.timestamp > 300 ) {
             $.sdData.lazyOn.timestamp = timestamp;
             lazy.lazy();
-            
-            
             tool.detection();
-            
-            var data = $.sdData.lazyOn;
-            
-            var viewH = $(window).height();
-            var viewT = $(window).scrollTop();
-            for(var i = 0; i < data.length; i++) {
-                var _data = data[i];
-                var _dom = _data.bindDom;
-                
-                clienH = _dom.height();
-                clienW = _dom.width();
-                clienT = _dom.scrollTop() || _dom[0].offsetTop;
-                clienL = _dom.scrollLeft() || _dom[0].offsetLeft;
-                
-                if(( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 )) {//在视口中
-                    var options = $.sdData.lazyOptions[_data.ouid];
-                    /*-----------------TODO--------------*/
-                    console.log(options);
-                    
-                    for(var j = 0; j < _dom.doms; j++) {
-                        console.log(_dom.doms[j].dom);
-                        tool.onAnimation(_dom.doms[j].dom, options);
-                    }
-                }
-                
-            }
-            
-            
-            
-           
+            lazy.container();
         }
     });
 }
@@ -327,22 +337,22 @@ tool.detection = function() {//监控
     }
 }
 
-tool.doms = function(elem, options, data, num) {
-    data[num] = {
+tool.doms = function(elem, options, arr, num) {//初始化doms格式
+    arr[arr.length] = {
         dom: elem,
         css: elem.attr('style'),
         repe: options.repe,
         view: options.view
     }
-    data.length++;
-    return data;
+    return arr;
 }
 
 tool.on = function(elem, query, ouid) {//底层绑定接口
     var length = $.sdData.lazyOn.length || 0,
         thisDom = elem.find(query),
         findLength = thisDom.length,//子元素长度
-        obj = {length: 0},//子元素集
+//        obj = {length: 0},//子元素集
+        arr = []
         data = $.sdData.lazyOn,
         options = $.sdData.lazyOptions[ouid];
     if(!!length) {//防止重复绑定
@@ -354,20 +364,14 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
     }
     else {        
         for(;findLength--;) {
-            obj = tool.doms(thisDom.eq(findLength), options, obj, findLength);
-    //        obj[findLength] = {
-    //            dom: thisDom.eq(findLength),
-    //            repe: options.repe,
-    //            css: thisDom.eq(findLength).attr('style'),
-    //            view: options.view
-    //        }
+            arr = tool.doms(thisDom.eq(findLength), options, arr);
         }
         data[length] = {
             bindDom: elem,
             thisDom: elem.find(query),
             query: query,
             ouid: ouid,
-            doms: obj
+            doms: arr
         };
         data.length = length + 1;
         data.timestamp = (new Date).getTime();
@@ -375,11 +379,6 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
         $.sdData.lazyOn = data;
         console.log($.sdData.lazyOn);
     }
-    
-}
-
-tool.onConfig = function() {
-    
 }
 
 $.fn.extend({
@@ -393,8 +392,6 @@ $.fn.extend({
     },
     
     sdOn: function(group, query) {
-//        console.log($(document).scrollTop(), $(document).scrollLeft());
-        
         var length = arguments.length;
         if(!!length) {
             group = typeof group === 'object' ?  $.sdGroup(group) : group;
