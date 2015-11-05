@@ -34,6 +34,8 @@ tool.transform = function(css) {
         origin = '';
     if(!!css.translate) {//位置
         transform += this.translate(css.translate);
+        
+        console.log(this._translate(css.translate));
     }
     if(!!css.rotate) {//旋转
         transform += this.rotate(css.rotate);
@@ -59,6 +61,17 @@ tool.translate = function(data) {
     y = $.sdIsPX(data[1] || '0px');
     z = $.sdIsPX(data[2] || '0px');
     translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';
+    return translate;
+}
+
+tool._translate = function(data) {
+    console.log(data);
+    var translate = '',
+        x, y, z;
+    x = $.sdIsPX(data[0] || '0px');
+    y = $.sdIsPX(data[1] || '0px');
+    z = $.sdIsPX(data[2] || '0px');
+    translate += 'translate3d(' + ('-' + x) + ', ' + ('-' + y) + ', ' + ('-' + z) + ') ';
     return translate;
 }
 
@@ -390,7 +403,7 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
 }
 
 $.fn.extend({
-    sdAnimation: function(group) {
+    _animation: function(group) {
         var length = arguments.length;
         if(length === 1) {
             //options = group;
@@ -399,7 +412,16 @@ $.fn.extend({
         }
     },
     
-    sdOn: function(group, query) {
+    _unmations: function(group) {
+        var length = arguments.length;
+        if(length === 1) {
+            //options = group;
+            group = typeof group === 'object' ? group : $.sdData.lazyOptions[group];
+            lazy.animation(this, group);//(elem, options)
+        }
+    },
+    
+    _on: function(group, query) {
         var length = arguments.length;
         if(!!length) {
             group = typeof group === 'object' ?  $.sdGroup(group) : group;
@@ -493,11 +515,6 @@ $.extend({
 //        }
 //        return group;
 //    },
-    sdGetGroup: function(group) {
-        if(typeof group === 'object') {
-//            group = 
-        }
-    },
     sdDetection: function() {
         tool.detection();
     },

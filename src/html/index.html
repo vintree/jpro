@@ -61,10 +61,10 @@
     });
     
     
-    $('.lazy2').sdOn({
+    $('.lazy2')._on({
         time: 2000,
         delay: 0,
-        ease: 'ease-back',//'ease-out',
+        ease: 'linear',//'ease-out',
         css: {
 //            width: '40',
 //            height: '20',
@@ -78,6 +78,7 @@
         },
         lazy: true,
         repe: false,
+        normal: true//正常模式
     }, '.on');
     
 //    $('.lazy1').sdOn({
@@ -100,7 +101,7 @@
 //    }, '.on');
     
     
-//    $('.lazy1').sdAnimation({
+//    $('.lazy1')._animation({
 //        time: 2000,
 //        delay: 0,
 //        ease: 'ease-back',//'ease-out',
