@@ -78,7 +78,7 @@
         },
         lazy: true,
         repe: false,
-        normal: true//正常模式
+        normal: false//正常模式
     }, '.on');
     
 //    $('.lazy1').sdOn({
@@ -111,17 +111,15 @@
 //            'background-color': 'blue',
 //            opacity: 1,
 //            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
+////            rotate: [.6, 1, .6, '80deg'],//
 //            skew: [-15, -15],
-//            scale: [2, 2],
-//            origin: ['30', '30']
+////            scale: [2, 2],
+////            origin: ['30', '30']
 //        },
 //        lazy: true,
 //        repe: false,
+//        normal: false
 //    });
-    
-    
-
     
     /*
         $.sdGroup(group,options);
@@ -148,7 +146,7 @@
     });
     
     
-    $('#div').sdAnimation('master');
+    $('#div')._animation('master');
     
 //    $.sdCleanGroup('master');
     

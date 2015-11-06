@@ -29,78 +29,86 @@ tool.transition = function(ease, time, delay) {
     return transition;
 }
 
-tool.transform = function(css) {
+tool.transform = function(css, type) {
     var transform = '',
         origin = '';
     if(!!css.translate) {//位置
-        transform += this.translate(css.translate);
-        
-        console.log(this._translate(css.translate));
+        transform += this.translate(css.translate, type);
     }
     if(!!css.rotate) {//旋转
-        transform += this.rotate(css.rotate);
+        transform += this.rotate(css.rotate, type);
     }
     if(!!css.skew) {//缩放
-        transform += this.skew(css.skew);
+        transform += this.skew(css.skew, type);
     }
     if(!!css.scale) {//比例
-        transform += this.scale(css.scale);
+        transform += this.scale(css.scale, type);
     }
     if(!!css.origin) {
-        origin += this.origin(css.origin);
+        origin += this.origin(css.origin, type);
     }
     transform += ';';
     transform = $.sdPrivateProperty('transform', transform) + origin;
     return transform;
 }
 
-tool.translate = function(data) {
+tool.translate = function(data, type) {//data-数据，type-normal模式
     var translate = '',
         x, y, z;
     x = $.sdIsPX(data[0] || '0px');
     y = $.sdIsPX(data[1] || '0px');
     z = $.sdIsPX(data[2] || '0px');
-    translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';
+    if(type) {
+        translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';
+    } else {
+        translate += 'translate3d(' + ('-' + x) + ', ' + ('-' + y) + ', ' + ('-' + z) + ') ';
+    }
     return translate;
 }
 
-tool._translate = function(data) {
-    console.log(data);
-    var translate = '',
-        x, y, z;
-    x = $.sdIsPX(data[0] || '0px');
-    y = $.sdIsPX(data[1] || '0px');
-    z = $.sdIsPX(data[2] || '0px');
-    translate += 'translate3d(' + ('-' + x) + ', ' + ('-' + y) + ', ' + ('-' + z) + ') ';
-    return translate;
-}
-
-tool.rotate = function(data) {
+tool.rotate = function(data, type) {
     var rotate = '',
         x, y, z, a;
     x = data[0];
     y = data[1];
     z = data[2];
     a = $.sdIsDEG(data[3] || '0deg');
-    rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
+    if(type) {
+        rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
+    } else {
+        rotate += 'rotate3d(' + ('-' + x) + ', ' + ('-' + y) + ', ' + ('-' + z) + ', ' + ('-' + a) + ') ';
+    }
     return rotate;
 }
 
-tool.skew = function(data) {
+tool.skew = function(data, type) {
     var skew = '',
         x, y;
-    x = $.sdIsDEG(data[0] || '0px');
-    y = $.sdIsDEG(data[1] || '0px');
-    skew += 'skew(' + x + ', ' + y + ') ';
+    
+    console.log(type);
+    
+    if(type) {
+        x = $.sdIsDEG(data[0] || '0px', type);
+        y = $.sdIsDEG(data[1] || '0px', type);
+        skew += 'skew(' + x + ', ' + y + ') ';
+    } else {
+        x = $.sdIsDEG(data[0] || '0px', type);
+        y = $.sdIsDEG(data[1] || '0px', type);
+        skew += 'skew(' + x + ', ' + y + ') ';
+    }
     return skew;  
 }
 
-tool.scale = function(data) {
+tool.scale = function(data, type) {
     var scale = '',
         x, y;
     x = data[0];
     y = data[1];
-    scale += 'scale(' + x + ', ' + y + ') ';
+    if(type) {
+        scale += 'scale(' + x + ', ' + y + ') ';
+    } else {
+        scale += 'scale(' + ('-' + x) + ', ' + ('-' + y) + ') ';
+    }
     return scale;
 },
     
@@ -120,24 +128,48 @@ tool.animation = function(dom, options) {//底层动画接口
         transform = '',
         origin = '',
         css = options.css,
+        initCss = dom.attr('style'),
         str;
     if(!!options) {
-        ease = this.initEase(options.ease);
-        transition = this.transition(ease, options.time, options.delay);
-        transform = this.transform(css);
-        str = transition + dom.attr('style') + ';';
-        if($.sdIsBlock(dom)) {
-            str += 'display: block;';
-        } else {
-            str += 'display: inline-block;';
+        if(!!options.normal) {
+            ease = this.initEase(options.ease);
+            transition = this.transition(ease, options.time, options.delay);
+            transform = this.transform(css, !!options.normal);
+            str = transition + initCss + ';';
+            if($.sdIsBlock(dom)) {
+                str += 'display: block;';
+            } else {
+                str += 'display: inline-block;';
+            }
+            dom.attr('style', str);//设置transition
+            
+            setTimeout(function() {//设置基本css属性
+                dom.css(css);
+            }, 60/1000);
+            setTimeout(function() {//设置transform属性
+                dom.attr('style',  dom.attr('style') + transform);
+            }, 60/1000);
         }
-        dom.attr('style', str);//设置transition
-        setTimeout(function() {//设置基本css属性
-            dom.css(css);
-        }, 60/1000);
-        setTimeout(function() {//设置transform属性
-            dom.attr('style', dom.attr('style') + transform);
-        }, 60/1000);
+        else {
+            ease = this.initEase(options.ease);
+            transition = this.transition(ease, options.time, options.delay);
+            transform = this.transform(css, !!options.normal);
+            str = transform + initCss + ';';
+            dom.attr('style', str);//设置transform
+            setTimeout(function() {//设置基本css属性
+                dom.css(css);
+            }, 60/1000);
+            if($.sdIsBlock(dom)) {
+                str = 'display: block;';
+            } else {
+                str = 'display: inline-block;';
+            }
+            setTimeout(function() {//设置transform属性
+                str += transition;
+                dom.attr('style', str + initCss);
+                dom.css(css);
+            }, 60/1000);
+        }
     }
 }
 
@@ -176,9 +208,6 @@ lazy.scrollDetection = function(dom) {//筛选dom
         clienW = dom.width(),
         clienT = dom.scrollTop() || dom[0].offsetTop,
         clienL = dom.scrollLeft() || dom[0].offsetLeft;
-    
-//    console.log((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0);
-    
     if((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {//在视口中
         return true;
     }
@@ -191,7 +220,8 @@ lazy.domsContainer = function(doms, options) {//筛选子dom
     for(i = 0; i < length; i++) {
         if(doms[i]) {
             if(lazy.scrollDetection(doms[i].dom)) {
-                tool.onAnimation(doms[i].dom, options);
+//                tool.onAnimation(doms[i].dom, options);
+                tool.animation(doms[i].dom, options);
                 if(!options.repe) {//没有重复
                     doms.splice(i, 1);
                     lazy.domsContainer(doms, options);
@@ -208,7 +238,6 @@ lazy.container = function() {//筛选容器
     for(var i = 0; i < data.length; i++) {
         var _data = data[i];
         var _dom = _data.bindDom;
-//        console.log(_dom.height());
         if(lazy.scrollDetection(_dom)) {
             options = $.sdData.lazyOptions[_data.ouid];
             lazy.domsContainer(_data.doms, options);
@@ -334,7 +363,7 @@ tool.detection = function() {//监控
         h_thisDom = $(obj.bindDom).find(obj.query);
         doms = obj.doms;
         options = $.sdData.lazyOptions[obj.ouid];
-        
+        console.log(options);
         h_length = $(obj.bindDom).find(obj.query).length;
         for(j = 0; j <h_length; j++) {//html中DOM长度
             tag = 0;//0 - 找不到， 1 - 找到
@@ -460,9 +489,14 @@ $.extend({
         }
         return data;
     },
-    sdIsDEG: function(data) {//检测deg单位
+    sdIsDEG: function(data, type) {//检测deg单位
         if(!isNaN(data)) {
-            return Number(data) + 'deg';
+            if(type) {
+                return Number(data) + 'deg';
+            }
+            else {
+                return (Number(data) + 180) + 'deg';   
+            }
         }
         return data;
     },
