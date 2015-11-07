@@ -1,13 +1,12 @@
 /**
-    2015-10-16
-    lazing V 0.2
+    2015-10-25
+    lazing V 0.21
     wuguzix@foxmail.com
 */
-;(function($, g) {
-    'use strict';
-    var lazy = {
+$.fn.lazing = function(options) {
+    var Obj = this,
+        lazing = {
         lets: {
-            name: '.lazy',//作用对象
             time: 1000,//执行时间
             delay: 0,//延迟时间
             offset: '20',//偏移量
@@ -16,68 +15,58 @@
             action: false,//是否支持缓动
             startOpacity: 0,//默认起始隐藏
             endOpacity: 1,//默认结束隐藏
-            
             repe: false,//是否支持重复
             view: false,//是否在视口
             ani: 0//没有进行动画  0-空闲，1-启动，2-进行中
         },
         config: [],//不支持懒加载
         lazyConfig: [],//支持懒加载
-        setConfig: function() {//分配数据类型
-            var i = 0,
-                l = arguments[0].length,
-                o = null,
+        setConfig: function(options) {//分配数据类型
+            var o = null,
                 t = {},
                 tag = null,
                 dom = null,
                 arr = [];
-            for(; i < l; i++) {//扫描对象
-                tag = this.random(4);
-                for(o in this.lets) {//扫描属性
-                    if(arguments[0][i].hasOwnProperty(o)) {
-                        t[o] = arguments[0][i][o] || this.lets[o];
-                    }
-                    else {
-                        t[o] = this.lets[o];
-                    }
-                }
-                t.dom = $(t.name);                
-                if(t.lazy) {
-                    dom = $(t.name);
-                    for(var di = 0, dl = dom.length; di < dl; di++) {//分离一个class对应多个DOM
-                        var temp = {};
-                        for(var s in t) {
-                            temp[s] = t[s];
-                        }
-                        tag = this.random(4);
-                        temp.tag = tag;
-                        temp.dom = dom.eq(di);
-                        arr.push(temp);
-                        this.lazyConfig.push(temp);
-                        this.register[tag] = {
-                            name: temp.name,
-                            view: temp.view,
-                            repe: temp.repe,
-                            ani: temp.ani,
-                            dom: temp.dom
-                        };
-                    }
-                }
-                else {
-                    this.config.push(t);
-                }
-                t = {};
+            tag = $._random(4);
+            for(o in this.lets) {//扫描属性
+                t[o] = options && options[o] || this.lets[o];
             }
+            t.dom = Obj;
+            if(t.lazy) {
+                dom = Obj;
+                for(var di = 0, dl = dom.length; di < dl; di++) {//分离一个class对应多个DOM
+                    var temp = {};
+                    for(var s in t) {//复制t
+                        temp[s] = t[s];
+                    }
+                    tag = $._random(4);
+                    temp.tag = tag;
+                    temp.dom = dom.eq(di);
+                    arr.push(temp);
+                    this.lazyConfig.push(temp);
+                    this.register[tag] = {
+                        view: temp.view,
+                        repe: temp.repe,
+                        ani: temp.ani,
+                        dom: temp.dom
+                    };
+                }
+            }
+            else {
+                this.config.push(t);
+            }
+            t = {};
         },
         hide: function() {//初始化隐藏
             var arr = arguments[0] || this.config.concat(this.lazyConfig),
                 l = arr.length,
-                i = 0;            
+                i = 0;
             for(; i < l; i++) {
-                $(arr[i].name).css('opacity', arr[i].startOpacity);
+//                    $(arr[i].name).css('opacity', arr[i].startOpacity);
+                Obj.css('opacity', arr[i].startOpacity);
             }
         },
-        working: function() {//效果工厂       
+        factory: function() {//效果工厂       
             var parentThis = this,
                 dom = null, //DOM对象
                 to = null, //临时对象
@@ -115,7 +104,7 @@
             }
         },
         unlazy: function() {//不需要懒加载
-            this.working(this.config);
+            this.factory(this.config);
         },
         lazy: function() {//需要懒加载
             var parentThis = this,
@@ -131,7 +120,6 @@
             clienW = null,
             clienT = null,
             clienL = null;
-            
             for(; i < l ; i++ ) {
                 t = c[i];
                 clienH = t.dom.height();
@@ -152,10 +140,10 @@
                 else {//移出视口
                     if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) { //在视口中
                         parentThis.register[t.tag].view = true;
-                        
+
                         if(parentThis.register[t.tag].ani === 0) {
                             parentThis.register[t.tag].ani = 1;
-                            parentThis.working([t]);
+                            parentThis.factory([t]);
                         }
                     }
                 }
@@ -170,24 +158,28 @@
         },
         register: {//懒加载注册
         },
-        random: function(n) {
-            var chars = '_ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz',
-                l = chars.length,
-                i = 0,
-                s = '',
-                gt = new Date().getTime() + '';
-            for(; i < n; i++) {
-                s += chars.charAt( Math.floor(Math.random()*l) );
-            }
-            s += '_' + gt.substring(gt.length - n);
-            return s;
-        },
-        init: function() {//初始化        
-            this.setConfig(arguments[0]);
+        init: function(options) {//初始化        
+            this.setConfig(options);
             this.hide();
             this.unlazy();
             this.srcoll();
         }
     };
-    window.lazy = lazy;    
-})(jQuery, window);
+    lazing.init(options);
+};
+
+$.extend({
+    _random: function(n) {
+        var chars = '_ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz',
+            l = chars.length,
+            i = 0,
+            s = '',
+            gt = new Date().getTime() + '';
+        for(; i < n; i++) {
+            s += chars.charAt( Math.floor(Math.random()*l) );
+        }
+        s += '_' + gt.substring(gt.length - n);
+        return s;
+    },
+})
+

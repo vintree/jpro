@@ -5,7 +5,7 @@
 
 // 引入 gulp及组件
 var gulp    = require('gulp'),                 //基础库
-    imagemin = require('gulp-imagemin'),       //图片压缩
+//    imagemin = require('gulp-imagemin'),       //图片压缩
     sass = require('gulp-sass'),               //sass
     minifycss = require('gulp-minify-css'),    //css压缩
     jshint = require('gulp-jshint'),           //js检查
