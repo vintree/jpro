@@ -55,64 +55,93 @@ tool.transform = function(css, type) {
 tool.translate = function(data, type) {//data-数据，type-normal模式
     var translate = '',
         x, y, z;
-    x = $.sdIsPX(data[0] || '0px');
-    y = $.sdIsPX(data[1] || '0px');
-    z = $.sdIsPX(data[2] || '0px');
-    if(type) {
-        translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';
-    } else {
-        translate += 'translate3d(' + ('-' + x) + ', ' + ('-' + y) + ', ' + ('-' + z) + ') ';
+    x = data[0];
+    y = data[1];
+    z = data[2];
+    if(!type) {
+        x = (-1) * x;
+        y = (-1) * y;
+        z = (-1) * z;
     }
+    x = $.sdIsPX(x || '0px');
+    y = $.sdIsPX(y || '0px');
+    z = $.sdIsPX(z || '0px');
+    translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';
+//    if(type) {
+//        translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';
+//    } else {
+//        translate += 'translate3d(' + (-1) * x + ', ' + (-1) * y + ', ' + (-1) * z + ') ';
+//    }
+    console.log(translate);
     return translate;
 }
 
-tool.rotate = function(data, type) {
+tool.rotate = function(data, type) {//旋转
     var rotate = '',
         x, y, z, a;
     x = data[0];
     y = data[1];
     z = data[2];
-    a = $.sdIsDEG(data[3] || '0deg');
-    if(type) {
-        rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
-    } else {
-        rotate += 'rotate3d(' + ('-' + x) + ', ' + ('-' + y) + ', ' + ('-' + z) + ', ' + ('-' + a) + ') ';
+    if(!type) {
+        x = (-1) * Number(x);
+        y = (-1) * Number(y);
+        z = (-1) * Number(z);
     }
+    a = $.sdIsDEG(data[3] || '0deg');
+    rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
+//    if(type) {
+//        rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
+//    } else {
+//        rotate += 'rotate3d(' + (-1) * x + ', ' + (-1) * y + ', ' + (-1) * z + ', ' + (-1) * a + ') ';
+//    }
     return rotate;
 }
 
-tool.skew = function(data, type) {
+tool.skew = function(data, type) {//切面
     var skew = '',
-        x, y;
+        x, y;  
     
-    console.log(type);
+    x = $.sdIsDEG(data[0] || '0px', type);
+    y = $.sdIsDEG(data[1] || '0px', type);
+    skew += 'skew(' + x + ', ' + y + ') ';
     
-    if(type) {
-        x = $.sdIsDEG(data[0] || '0px', type);
-        y = $.sdIsDEG(data[1] || '0px', type);
-        skew += 'skew(' + x + ', ' + y + ') ';
-    } else {
-        x = $.sdIsDEG(data[0] || '0px', type);
-        y = $.sdIsDEG(data[1] || '0px', type);
-        skew += 'skew(' + x + ', ' + y + ') ';
-    }
+//    if(type) {
+//        x = $.sdIsDEG(data[0] || '0px', type);
+//        y = $.sdIsDEG(data[1] || '0px', type);
+//        skew += 'skew(' + x + ', ' + y + ') ';
+//    } else {
+//        x = $.sdIsDEG(data[0] || '0px', type);
+//        y = $.sdIsDEG(data[1] || '0px', type);
+//        skew += 'skew(' + x + ', ' + y + ') ';
+//    }
     return skew;  
 }
 
-tool.scale = function(data, type) {
+tool.scale = function(data, type) {//比例
     var scale = '',
         x, y;
+    
     x = data[0];
     y = data[1];
-    if(type) {
-        scale += 'scale(' + x + ', ' + y + ') ';
-    } else {
-        scale += 'scale(' + ('-' + x) + ', ' + ('-' + y) + ') ';
+    if(!type) {
+        x = (-1) * Number(x);
+        y = (-1) * Number(y);
     }
+    scale += 'scale(' + x + ', ' + y + ') ';
+    
+    
+//    x = data[0];
+//    y = data[1];
+//    
+//    if(type) {
+//        scale += 'scale(' + x + ', ' + y + ') ';
+//    } else {
+//        scale += 'scale(' + (-1) * x + ', ' + (-1) * y + ') ';
+//    }
     return scale;
 },
     
-tool.origin = function(data) {
+tool.origin = function(data) {//支点
     var origin = '',
         x, y;
     x = data[0];
@@ -122,7 +151,7 @@ tool.origin = function(data) {
     return origin;
 }
     
-tool.animation = function(dom, options) {//底层动画接口
+tool.animation = function(dom, options) {//*底层动画接口
     var ease = '',
         transition = '',
         transform = '',
@@ -441,20 +470,44 @@ $.fn.extend({
         }
     },
     
-    _unmations: function(group) {
-        var length = arguments.length;
-        if(length === 1) {
-            //options = group;
-            group = typeof group === 'object' ? group : $.sdData.lazyOptions[group];
-            lazy.animation(this, group);//(elem, options)
-        }
+//    _unmations: function(group) {
+//        var length = arguments.length;
+//        if(length === 1) {
+//            //options = group;
+//            group = typeof group === 'object' ? group : $.sdData.lazyOptions[group];
+//            lazy.animation(this, group);//(elem, options)
+//        }
+//    },
+    
+    _unormal: function(options) {
+        var horizontal = options.right || options.left * (-1),
+            vertical = options.bottom || options.top * (-1);
+        options = {
+            time: 1000,
+            delay: 0,
+            ease: 'ease-out',
+            css: {
+                translate: [horizontal, vertical, 0],
+                opacity: 1
+            },
+            lazy: false,
+            repe: false,
+            normal: false
+        };
+        this._animation(options);
+//        options.translate = [horizontal, vertical, 0];
+//        options.opacity = 1;
+//        options.
+//        var translate = [horizontal, vertical, 0];
+        
     },
     
     _on: function(group, query) {
         var length = arguments.length;
         if(!!length) {
             group = typeof group === 'object' ?  $.sdGroup(group) : group;
-            tool.on(this, query, group, true);//(elem, query, group)
+            //(elem, query, group)
+            tool.on(this, query, group, true);
         }
     }
 });

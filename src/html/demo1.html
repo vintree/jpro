@@ -24,26 +24,29 @@
 <script>
     
     
-    $('.box1_name')._unormal()
-    
-    
-    
-    $('.box1_name')._animation({
-        time: 1000,
-        delay: 0,
-        ease: 'ease-out',//'ease-out',ease-back
-        css: {
-            opacity: 1,
-            translate: [100, 0],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
-//            skew: [-2, -2],
-//            scale: [1.3, 1.3],
-//            origin: ['30', '30']
-        },
-        lazy: false,
-        repe: false,
-        normal: false
+    $('.box1_name')._unormal({
+        left: '100',
+        top: '100'
     });
+    
+    
+    
+//    $('.box1_name')._animation({
+//        time: 1000,
+//        delay: 0,
+//        ease: 'ease-out',//'ease-out',ease-back
+//        css: {
+//            opacity: 1,
+//            translate: [100, 0],//左右 上下 前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+////            rotate: [.6, 1, .6, '80deg'],//
+////            skew: [-2, -2],
+////            scale: [1.3, 1.3],
+////            origin: ['30', '30']
+//        },
+//        lazy: false,
+//        repe: false,
+//        normal: false
+//    });
     
     $('.writer_inc')._animation({
         time: 1000,
