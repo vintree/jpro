@@ -6,18 +6,49 @@
         <script src="../js/src/animation.js"></script>
         <link rel="stylesheet" href="../css/demo1.css">
     </head>
-    <body>
+    <body style="height: 2000px;">
         <div class="box1">
             <div class="box1-bk"></div>
             <div class="bo1-container">
                 <div class="box1-describe">
                     <h2 class="box1_name">JPRO</h2>
-                    <div>jpro由lazing和amazing而来,继承了两个项目的核心部分</div>
+                    <h4>jpro由lazing和amazing而来,继承了两个项目的核心部分</h4>
+                    <div class="box1_bt">
+                        <a href="https://github.com/wuguzi/lazing" target="_blank">
+                            <div class="box1_bt_st box1_github_bt">
+                                <img class="box1_bt_img" src="../img/git.jpg" width="40px">
+                                <div class="box1_bt_name">Github-jpro bate1.0</div>
+                                <div class="box1_bt_tag">
+                                    <div class="box1_bt_tags box1_bt_tag1"></div>
+                                    <div class="box1_bt_tags box1_bt_tag2"></div>
+                                </div>    
+                            </div>
+                        </a>
+                    </div>
                 </div>
-                
                 <div class="writer_inc">图片来自-乐乎</div>
             </div>
-            
+        </div>
+        <div class="box2">
+            <div>
+                <h1>JPRO</h1>
+                <div class="box2_foreword"><b>jpro</b>全称叫JavaScript project,它的出现解决了我在项目中的常规或非常规效果问题,可以快速搭建想要的效果.当然<b>jpro</b>的出现是一个偶然,<b>jpro</b>是<b>amazing[效果库组件]</b>结合和<b>lazing[懒加载组件]</b>的产物,当时在分别制作<b>amazing</b>和<b>lazing</b>时<b>jpro</b>还不在计划中,偶然的一次意外才意识到<b>jpro</b>出现的必要性.</div>
+                <div class="box2_left">
+                    <h3>Monkey <small class="btag"></small> 动画引擎</h3>
+                    <div class="box2_describe">
+                        <b>lazing</b>是在<b>jQuery</b>的<span class="fun_color">animation</span>上进行了一层封装,同时进行了几次升级,在V2版效果达到预期,但在与amazing合并时遇到了性能和当初设计的扩展性等问题,所以放弃了animation作为jpro的底层动画引擎,重新写了一套动画引擎叫:monkey.
+                    </div>
+                </div>
+                <div class="box2_right">
+                    <h3>jpro能做什么</h3>
+                    <ol class="box2_describe">
+                        <li>可以快速搭建类似苹果官网的效果.</li>
+                        <li>jpro可以做具备有开发能力的个人或机构搭建出类似[搜狐快站][易企秀]这样效果的底层库.</li>
+                        <li>在乎官方可看性的开发者或机构.</li>
+                    </ol>
+                </div>
+            </div>
+                
         </div>
     </body>
 </html>
@@ -25,13 +56,47 @@
     
     
     $('.box1_name')._unormal({
-        left: '100',
-        top: '100'
+        right: '100',
+//        top: '100'
+    });
+    
+    $('.writer_inc')._unormal({
+        right: '100',
+//        bottom: '100'
+    });
+    
+    $('.box1_bt')._unormal({
+        right: 100
+    });
+    
+    $('.box2')._unormal({
+        bottom: 100
     });
     
     
+//    $('.box2')._animation({
+//       time: 2000,
+//        delay: 0,
+//        ease: 'ease-back',//'ease-out',
+//        css: {
+////            width: '150',
+////            height: '150',
+////            'background-color': 'blue',
+//            opacity: 1,
+//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+////            rotate: [.6, 1, .6, '80deg'],//
+////            skew: [-15, -15],
+////            scale: [2, 2],
+////            origin: ['30', '30']
+//        },
+//        lazy: true,
+//        repe: false,
+//    });
     
-//    $('.box1_name')._animation({
+    
+    
+    
+//    $('.box2')._animation({
 //        time: 1000,
 //        delay: 0,
 //        ease: 'ease-out',//'ease-out',ease-back
@@ -43,23 +108,23 @@
 ////            scale: [1.3, 1.3],
 ////            origin: ['30', '30']
 //        },
-//        lazy: false,
+//        lazy: true,
 //        repe: false,
 //        normal: false
 //    });
     
-    $('.writer_inc')._animation({
-        time: 1000,
-        delay: 0,
-        ease: "ease-out",
-        css: {
-            opacity: 1,
-            translate: [0, 100]
-        },
-        lazy: false,
-        repe: false,
-        normal: false
-    });
+//    $('.writer_inc')._animation({
+//        time: 1000,
+//        delay: 0,
+//        ease: "ease-out",
+//        css: {
+//            opacity: 1,
+//            translate: [0, 100]
+//        },
+//        lazy: false,
+//        repe: false,
+//        normal: false
+//    });
     
     
 </script>

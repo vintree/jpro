@@ -469,16 +469,7 @@ $.fn.extend({
             lazy.animation(this, group);//(elem, options)
         }
     },
-    
-//    _unmations: function(group) {
-//        var length = arguments.length;
-//        if(length === 1) {
-//            //options = group;
-//            group = typeof group === 'object' ? group : $.sdData.lazyOptions[group];
-//            lazy.animation(this, group);//(elem, options)
-//        }
-//    },
-    
+        
     _unormal: function(options) {
         var horizontal = options.right || options.left * (-1),
             vertical = options.bottom || options.top * (-1);
@@ -495,11 +486,24 @@ $.fn.extend({
             normal: false
         };
         this._animation(options);
-//        options.translate = [horizontal, vertical, 0];
-//        options.opacity = 1;
-//        options.
-//        var translate = [horizontal, vertical, 0];
-        
+    },
+    
+    _normal: function(options) {
+        var horizontal = options.right || options.left * (-1),
+            vertical = options.bottom || options.top * (-1);
+        options = {
+            time: 1000,
+            delay: 0,
+            ease: 'ease-out',
+            css: {
+                translate: [horizontal, vertical, 0],
+                opacity: 1
+            },
+            lazy: false,
+            repe: false,
+            normal: true
+        };
+        this._animation(options);
     },
     
     _on: function(group, query) {

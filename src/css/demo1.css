@@ -1,5 +1,10 @@
 html,body {
     margin: 0;
+    color: #333;
+}
+
+b {
+    color: #1d7eb1;
 }
 
 .box1_name {
@@ -11,8 +16,9 @@ html,body {
 
 .box1 {
     position: relative;
-    height: 950px;
+    height: 1250px;
     background-image: url(../img/3.jpg);
+    background-repeat: no-repeat;
     color: #fff;
     overflow: hidden;
 }
@@ -35,7 +41,7 @@ html,body {
 .writer_inc {
     position: absolute;
     right: 30px;
-    bottom: 30px;
+    top: 30px;
     opacity: 0;
 }
 
@@ -51,4 +57,101 @@ html,body {
     position: relative;
     top: 150px;
     text-align: center;
+}
+
+.box1_github_bt {
+    background-color: rgb(255, 255, 255);
+    color: dimgray;
+}
+
+.box1_bt_st {
+    display: inline-block;
+    height: 40px;
+    padding: 5px 10px;
+    border-radius: 5px;
+/*    line-height: 40px;*/
+}
+
+.box1_bt_name {
+/*    display: inline-block;*/
+    float: left;
+    line-height: 40px;
+}
+
+.box1_bt_img {
+    float: left;
+    margin-right: 5px;
+}
+
+.box1_bt_tags {
+    border-top: 1px solid dimgray;
+    width: 10px;
+    display: inline-block;
+}
+
+.box1_bt_tag {
+    position: relative;
+    top: 0px;
+    left: 0px;
+    float: left;
+    width: 25px;
+    height: 40px;
+}
+
+.box1_bt_tag1 {
+    position: absolute;
+    top: 16px;
+    left: 10px;
+    transform: rotate(45deg);
+}
+
+.box1_bt_tag2 {
+    position: absolute;
+    top: 23px;
+    left: 10px;
+    transform: rotate(-45deg);
+}
+
+.box1_bt {
+    opacity: 0;
+}
+
+.box2 {
+    width: 1024px;
+    margin: 40px auto;
+    opacity: 0;
+    overflow: hidden;
+}
+
+.box2_describe {
+    line-height: 25px;
+}
+
+.fun_color {
+    color: #ac30a2;
+}
+
+.btag {
+    text-decoration: underline;
+    font-size: 50%;
+}
+
+.box2_foreword {
+    font-size: 20px;
+    padding: 20px 15px;
+    line-height: 35px;
+}
+
+.box2_left {
+    box-sizing: border-box;
+    float: left;
+    width: 50%;
+    padding: 30px 15px;
+}
+
+.box2_right {
+    box-sizing: border-box;
+    float: right;
+    width: 50%;
+    padding: 30px 15px;
 }
