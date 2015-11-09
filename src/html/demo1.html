@@ -6,13 +6,13 @@
         <script src="../js/src/animation.js"></script>
         <link rel="stylesheet" href="../css/demo1.css">
     </head>
-    <body style="height: 2000px;">
+    <body>
         <div class="box1">
             <div class="box1-bk"></div>
             <div class="bo1-container">
                 <div class="box1-describe">
                     <h2 class="box1_name">JPRO</h2>
-                    <h4>jpro由lazing和amazing而来,继承了两个项目的核心部分</h4>
+                    <h3>jpro由lazing和amazing而来,继承了两个项目的核心部分,强大的动画组件</h3>
                     <div class="box1_bt">
                         <a href="https://github.com/wuguzi/lazing" target="_blank">
                             <div class="box1_bt_st box1_github_bt">
@@ -30,7 +30,7 @@
             </div>
         </div>
         <div class="box2">
-            <div>
+            <div class="box2_container">
                 <h1>JPRO</h1>
                 <div class="box2_foreword"><b>jpro</b>全称叫JavaScript project,它的出现解决了我在项目中的常规或非常规效果问题,可以快速搭建想要的效果.当然<b>jpro</b>的出现是一个偶然,<b>jpro</b>是<b>amazing[效果库组件]</b>结合和<b>lazing[懒加载组件]</b>的产物,当时在分别制作<b>amazing</b>和<b>lazing</b>时<b>jpro</b>还不在计划中,偶然的一次意外才意识到<b>jpro</b>出现的必要性.</div>
                 <div class="box2_left">
@@ -48,7 +48,39 @@
                     </ol>
                 </div>
             </div>
-
+            
+            <div class="box2_editor">
+                <h1>优秀编辑器</h1>
+                <div class="editor_box">
+                    <div class="editor_li">
+                        <img class="editor_logo" src="../img/css-only-brackets-logo.jpg" >
+                        <div class="editor_name">brackets</div>
+                        <div class="editor_describe">Adobe旗下开源编辑器, Brackets 是一个免费、开源且跨平台的 HTML/CSS/JavaScript 前端 WEB 集成开发环境 (IDE工具)。该项目由 Adobe 创建和维护，根据MIT许可证发布，支持 <a class="editor_bk" href="http://brackets.io/" target="_blank">Windows</a>、<a class="editor_bk" href="http://brackets.io/" target="_blank">Linux</a> 以及 <a class="editor_bk" href="http://brackets.io/" target="_blank">OS X</a> 平台。</div>
+                    </div>
+                    <div class="editor_li">
+                        <img class="editor_logo" src="../img/atom.jpg" >
+                        <div class="editor_name">atom</div>
+                        <div class="editor_describe">Atom 代码编辑器支持 <a class="editor_atom" href="https://atom.io/" target="_blank">Windows</a>、<a class="editor_atom" href="https://atom.io/" target="_blank">Mac</a>、<a class="editor_atom" href="https://atom.io/" target="_blank">Linux</a> 三大桌面平台，完全免费，并且已经在 GitHub 上开放了全部的源代码。在经过一段长时间的迭代开发和不断改进后，Atom 终于从早期的测试版达到了 1.0 正式版了！相比之前的版本，在性能和稳定性方面都有着显著的改善。</div>
+                    </div>
+                    <div class="editor_li">
+                        <img class="editor_logo" src="../img/sbl.jpg" >
+                        <div class="editor_name">sublime</div>
+                        <div class="editor_describe">Sublime Text 是一个轻量、简洁、高效、跨平台的编辑器, 支持 <a class="editor_sbl" href="http://www.jetbrains.com/webstorm/" target="_blank">Windows</a>、<a class="editor_sbl" href="http://www.jetbrains.com/webstorm/" target="_blank">Linux</a> 以及 <a class="editor_sbl" href="http://www.jetbrains.com/webstorm/" target="_blank">OS X</a> 平台。</div>
+                    </div>
+                    <div class="editor_li">
+                        <img class="editor_logo" src="../img/ws.png" >
+                        <div class="editor_name">webstrom</div>
+                        <div class="editor_describe">WebStorm 是 JetBrains 推出的一款商业的 JavaScript 开发工具, 支持 <a class="editor_wb" href="http://www.jetbrains.com/webstorm/" target="_blank">Windows</a>、<a class="editor_wb" href="http://www.jetbrains.com/webstorm/" target="_blank">Linux</a> 以及 <a class="editor_wb" href="http://www.jetbrains.com/webstorm/" target="_blank">OS X </a>平台。</div>
+                    </div>
+                </div>
+            </div>
+            
+            <footer class="footer_box">
+                <div class="footer_container">
+                    <div style="float: left">工作单位: 搜狐视频</div>
+                    <div style="float: right">作者: 五谷子 / wuguzix@foxmail.com</div>
+                </div>
+            </footer>
         </div>
     </body>
 </html>
@@ -57,7 +89,6 @@
 
     $('.box1_name')._unormal({
         right: '100',
-//        top: '100'
     });
 
     $('.writer_inc')._unormal({
@@ -96,16 +127,16 @@
     // $('.box2')._animation('master');
 
 
-   $(document)._on({
-       time: 2000,
+   $('.box2')._on({
+       time: 1000,
        delay: 0,
-       ease: 'ease-back',//'ease-out',
+       ease: 'ease-out',//'ease-out',
        css: {
 //            width: '150',
 //            height: '150',
 //            'background-color': 'blue',
            opacity: 1,
-           translate: ['200', 0],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+           translate: ['0', 100],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
 //            rotate: [.6, 1, .6, '80deg'],//
 //            skew: [-15, -15],
 //            scale: [2, 2],
@@ -113,7 +144,7 @@
        },
        lazy: true,
        repe: false,
-   }, '.box2');
+   }, '.box2_container');
 
 
 //    $('.box2')._animation({

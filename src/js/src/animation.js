@@ -67,12 +67,6 @@ tool.translate = function(data, type) {//data-数据，type-normal模式
     y = $.sdIsPX(y || '0px');
     z = $.sdIsPX(z || '0px');
     translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';
-//    if(type) {
-//        translate += 'translate3d(' + x + ', ' + y + ', ' + z + ') ';
-//    } else {
-//        translate += 'translate3d(' + (-1) * x + ', ' + (-1) * y + ', ' + (-1) * z + ') ';
-//    }
-    console.log(translate);
     return translate;
 }
 
@@ -89,31 +83,15 @@ tool.rotate = function(data, type) {//旋转
     }
     a = $.sdIsDEG(data[3] || '0deg');
     rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
-//    if(type) {
-//        rotate += 'rotate3d(' + x + ', ' + y + ', ' + z + ', ' + a + ') ';
-//    } else {
-//        rotate += 'rotate3d(' + (-1) * x + ', ' + (-1) * y + ', ' + (-1) * z + ', ' + (-1) * a + ') ';
-//    }
     return rotate;
 }
 
 tool.skew = function(data, type) {//切面
     var skew = '',
         x, y;
-
     x = $.sdIsDEG(data[0] || '0px', type);
     y = $.sdIsDEG(data[1] || '0px', type);
     skew += 'skew(' + x + ', ' + y + ') ';
-
-//    if(type) {
-//        x = $.sdIsDEG(data[0] || '0px', type);
-//        y = $.sdIsDEG(data[1] || '0px', type);
-//        skew += 'skew(' + x + ', ' + y + ') ';
-//    } else {
-//        x = $.sdIsDEG(data[0] || '0px', type);
-//        y = $.sdIsDEG(data[1] || '0px', type);
-//        skew += 'skew(' + x + ', ' + y + ') ';
-//    }
     return skew;
 }
 
@@ -128,16 +106,6 @@ tool.scale = function(data, type) {//比例
         y = (-1) * Number(y);
     }
     scale += 'scale(' + x + ', ' + y + ') ';
-
-
-//    x = data[0];
-//    y = data[1];
-//
-//    if(type) {
-//        scale += 'scale(' + x + ', ' + y + ') ';
-//    } else {
-//        scale += 'scale(' + (-1) * x + ', ' + (-1) * y + ') ';
-//    }
     return scale;
 },
 
@@ -233,15 +201,14 @@ tool.onAnimation = function(dom, options) {
 // ----------------------------------------------------------------------
 
 lazy.scrollDetection = function(dom) {//筛选将要进入视口的dom
-    var viewH = $(window).height(),
+    var viewH = window.innerHeight,
         viewT = $(window).scrollTop(),
         clienH = dom.height(),
         clienW = dom.width(),
         clienT = dom.scrollTop() || dom[0].offsetTop,
         clienL = dom.scrollLeft() || dom[0].offsetLeft;
-        console.log(dom);
-        // console.log(viewH, viewT, clienT);
-        console.log((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0);
+         console.log(viewH, viewT, clienT);
+//        console.log((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0);
     if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {//在视口中
         return true;
     }
@@ -293,12 +260,19 @@ lazy.scroll = function() {//监控
         lazy.pack();
     $(window).on('scroll', function() {
         var data = $.sdData.lazyOn,//可能没有数据
-            timestamp;
+            timestamp,
+            viewT = $(window).scrollTop();
         timestamp = (new Date).getTime();
-        // if( timestamp - data.timestamp > 300 ) {
+        if(viewT < 50) {
             $.sdData.lazyOn.timestamp = timestamp;
             lazy.pack();
-        // }
+        }
+        else {
+            if( timestamp - data.timestamp > 300 ) {
+                $.sdData.lazyOn.timestamp = timestamp;
+                lazy.pack();
+             }
+        }
     });
 }
 
@@ -314,8 +288,7 @@ lazy.register = function(dom, ouid) {//注册：1.对象
 
 lazy.lazy = function() {//懒加载
     var
-    viewH = $(window).height(),
-    viewT = $(window).scrollTop(),
+    viewH = window.innerHeight,
     lazy,
     clienH,
     clienW,
@@ -462,7 +435,7 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
     data.tag = 1;
     $.sdData.lazyOn = data;
     lazy.scroll();
-    console.log($.sdData.lazyOn);
+//    console.log($.sdData.lazyOn);
 }
 
 $.fn.extend({
@@ -474,6 +447,16 @@ $.fn.extend({
             lazy.animation(this, group);//(elem, options)
         }
     },
+    
+    _on: function(group, query) {
+        var length = arguments.length;
+        if(!!length) {
+            group = typeof group === 'object' ?  $.sdGroup(group) : group;
+            //(elem, query, group)
+            tool.on(this, query, group, true);
+        }
+    },
+    
     _unormal: function(options) {
         var horizontal = options.right || options.left * (-1),
             vertical = options.bottom || options.top * (-1);
@@ -510,14 +493,7 @@ $.fn.extend({
         this._animation(options);
     },
 
-    _on: function(group, query) {
-        var length = arguments.length;
-        if(!!length) {
-            group = typeof group === 'object' ?  $.sdGroup(group) : group;
-            //(elem, query, group)
-            tool.on(this, query, group, true);
-        }
-    }
+    
 });
 
 $.extend({

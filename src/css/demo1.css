@@ -16,7 +16,7 @@ b {
 
 .box1 {
     position: relative;
-    height: 1250px;
+    height: 950px;
     background-image: url(../img/3.jpg);
     background-repeat: no-repeat;
     color: #fff;
@@ -42,6 +42,7 @@ b {
     position: absolute;
     right: 30px;
     top: 30px;
+    font-size: 14px;
     opacity: 0;
 }
 
@@ -119,8 +120,7 @@ b {
 .box2 {
     width: 1024px;
     margin: 40px auto;
-    opacity: 0;
-    overflow: hidden;
+    
 }
 
 .box2_describe {
@@ -154,4 +154,69 @@ b {
     float: right;
     width: 50%;
     padding: 30px 15px;
+}
+
+.box2_container {
+    overflow: hidden;
+    opacity: 0;
+}
+
+.editor_box {
+    display: flex;
+}
+
+.editor_li {
+    text-align: center;
+    flex: 1;
+    padding: 0 15px;
+}
+
+.editor_logo {
+    height: 120px;
+}
+
+.editor_name {
+    line-height: 35px;
+    font-size: 20px;
+}
+
+.editor_describe {
+    text-align: left;
+    line-height: 25px;
+    text-indent: 2em;
+    color: #555;
+}
+
+.editor_bk {
+    color: #0086e3;
+    text-decoration: none;
+}
+
+.editor_wb {
+    color: #0ccbcb;
+    text-decoration: none;
+}
+
+.editor_sbl {
+    text-decoration: none;
+    color: #e69a0a;
+}
+
+.editor_atom {
+    text-decoration: none;
+    color: #05b550;
+}
+
+.footer_box {
+    margin-top: 60px;
+    border-top: 1px solid #bababa;
+}
+
+
+
+.footer_container {
+    overflow: hidden;
+    padding: 10px 0;
+    font-size: 13px;
+    color: dimgray;
 }
