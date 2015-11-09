@@ -20,22 +20,22 @@
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
         <span class="lazy1" style="position: relative; top: 150px">hello world1</span>
 -->
-        
+
         <div class="lazy2" style="">
             <div class="on">on1</div>
             <div class="on">on2</div>
         </div>
-        
-        
+
+
         <span class="lazy" style="color: red;">hello world-111</span>
-        
-        
+
+
 		<div id="nimen" style="position: relative;height: 3000px;">
 			<div class="div" id="div" style='position: absolute; top: 1500px; left: 0; width: 50px; height: 50px; background-color: red;'></div>
 		</div>
-        
-        
-        
+
+
+
 <!--
         <div>
             <span>
@@ -49,18 +49,18 @@
 	</body>
 </html>
 <script>
-    
+
     $('.detection').on('click', function() {
         $.sdDetection();
     })
     $('.add').on('click', function() {
-        $('.lazy2').append('<div class="on">on2</div>');        
+        $('.lazy2').append('<div class="on">on2</div>');
     });
     $('.timestram').on('click', function() {
         $.sdScroll();
     });
-    
-    
+
+
     $('.lazy2')._on({
         time: 2000,
         delay: 0,
@@ -80,27 +80,9 @@
         repe: false,
         normal: false//正常模式
     }, '.on');
-    
-//    $('.lazy1').sdOn({
-//        time: 2000,
-//        delay: 0,
-//        ease: 'ease-back',//'ease-out',
-//        css: {
-//            width: '150',
-//            height: '150',
-//            'background-color': 'blue',
-//            opacity: 1,
-//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
-//            skew: [-15, -15],
-//            scale: [2, 2],
-//            origin: ['30', '30']
-//        },
-//        lazy: true,
-//        repe: false,
-//    }, '.on');
-    
-    
+
+
+
 //    $('.lazy1')._animation({
 //        time: 2000,
 //        delay: 0,
@@ -120,195 +102,32 @@
 //        repe: false,
 //        normal: false
 //    });
-    
+
     /*
         $.sdGroup(group,options);
         $.sdCleanGroup(optiosns);
         $('query').sdAnimation(group || options);
     */
-    var s = $.sdGroup('master', {
-        time: 2000,
-        delay: 0,
-        ease: 'ease-back',//'ease-out',
-        css: {
-            width: '150',
-            height: '150',
-            'background-color': 'blue',
-            opacity: 1,
-            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-            rotate: [.6, 1, .6, '80deg'],//
-            skew: [-15, -15],
-            scale: [2, 2],
-            origin: ['30', '30']
-        },
-        lazy: true,
-        repe: false,
-    });
-    
-    
-    $('#div')._animation('master');
-    
+    // var s = $.sdGroup('master', {
+    //     time: 2000,
+    //     delay: 0,
+    //     ease: 'ease-back',//'ease-out',
+    //     css: {
+    //         width: '150',
+    //         height: '150',
+    //         'background-color': 'blue',
+    //         opacity: 1,
+    //         translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+    //         rotate: [.6, 1, .6, '80deg'],//
+    //         skew: [-15, -15],
+    //         scale: [2, 2],
+    //         origin: ['30', '30']
+    //     },
+    //     lazy: true,
+    //     repe: false,
+    // });
+    // $('#div')._animation('master');
+
 //    $.sdCleanGroup('master');
-    
-//    $('.lazy1').sdAnimation('master');
-    
-//    console.log($('.div').parent);
-//    console.log($(document));
-    
-//    $('.lazy1').sdAnimation({
-//        time: 2000,
-//        delay: 0,
-//        ease: 'ease-back',//'ease-out',
-//        css: {
-//            width: '150',
-//            height: '150',
-//            'background-color': 'blue',
-//            opacity: 1,
-//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
-//            skew: [-15, -15],
-//            scale: [2, 2],
-//            origin: ['30', '30']
-//        },
-//        lazy: true,
-//        repe: false,
-//    });
-    
-//    $('#div').sdAnimation({
-//        time: 2000,
-//        delay: 0,
-//        ease: 'ease-back',//'ease-out',
-//        css: {
-//            width: '150',
-//            height: '150',
-//            'background-color': 'blue',
-//            opacity: 1,
-//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
-//            skew: [-15, -15],
-//            scale: [2, 2],
-//            origin: ['30', '30']
-//        },
-//        lazy: true,
-//        repe: false,
-//    });
-    
-//    console.log($('div>span>#lazy1'));
-    
-    
-//    $('.lazy1').lazing({
-//        time: 2000,
-//        delay: 0,
-//        timing: 'back',//'ease-out',
-//        css: {
-//            width: '150',
-//            height: '150',
-//            'background-color': 'blue',
-//            opacity: 0,
-//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
-//            skew: [-15, -15],
-//            scale: [2, 2],
-//            origin: ['30', '30']
-//        },
-//    }, true, true);
-//    
-//    $('.lazy2').lazing({
-//        time: 2000,
-//        delay: 0,
-//        timing: 'back',//'ease-out',
-//        css: {
-//            width: '150',
-//            height: '150',
-//            'background-color': 'blue',
-//            opacity: 0,
-//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
-//            skew: [-15, -15],
-//            scale: [2, 2],
-//            origin: ['30', '30']
-//        },
-//    }, true, true);
-//    
-//     $('.lazy').lazing({
-//        time: 2000,
-//        delay: 0,
-//        timing: 'back',//'ease-out',
-//        css: {
-//            width: '150',
-//            height: '150',
-//            'background-color': 'blue',
-//            opacity: 0,
-//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
-//            skew: [-15, -15],
-//            scale: [2, 2],
-//            origin: ['30', '30']
-//        },
-//    }, true, true);
-    
-//    console.log(window);
-    
-    
-//    $('.lazy1').cssAnimation({
-//        time: 2000,
-//        delay: 0,
-//        timing: 'back',//'ease-out',
-//        css: {
-//            width: '150',
-//            height: '150',
-//            'background-color': 'blue',
-//            opacity: 0,
-//            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
-//            skew: [-15, -15],
-//            scale: [2, 2],
-//            origin: ['30', '30']
-//        },
-//        repe: false,//重复动画
-//    });
-    
-    
-//    $('.lazy1').lazing({
-//        time: 1000,//执行时间
-//        delay: 0,//延迟时间
-//        offset: '100',//偏移量
-//        orien: 'top',//方向
-//        lazy: true,//是否支持赖加载
-//        repe: true,//是否支持重复
-//        startOpacity: 0.5,//起始隐藏
-//        endOpacity: 1//结束隐藏
-//    });
-//    
-//    $('.lazy2').lazing();
-//    $('#div').lazing({
-//        lazy: true,
-//        repe: true
-//    });
-    
-//    lazy.init([
-//        {
-//            name: '.lazy1',//作用对象
-//            time: 1000,//执行时间
-//            delay: 0,//延迟时间
-//            offset: '100',//偏移量
-//            orien: 'top',//方向
-//            lazy: true,//是否支持赖加载
-//            repe: true,//是否支持重复
-//            startOpacity: 0,//起始隐藏
-//            endOpacity: 1//结束隐藏
-//        },
-//        {
-//            name: '.lazy2'
-//
-//        },
-//        {
-//            name: '.lazy'
-//        },
-//        {
-//            name: '#div',
-//            lazy: true,
-//            repe: true
-//        }
-//    ]);
+
 </script>

@@ -21,7 +21,7 @@
                                 <div class="box1_bt_tag">
                                     <div class="box1_bt_tags box1_bt_tag1"></div>
                                     <div class="box1_bt_tags box1_bt_tag2"></div>
-                                </div>    
+                                </div>
                             </div>
                         </a>
                     </div>
@@ -48,54 +48,96 @@
                     </ol>
                 </div>
             </div>
-                
+
         </div>
     </body>
 </html>
 <script>
-    
-    
+
+
     $('.box1_name')._unormal({
         right: '100',
 //        top: '100'
     });
-    
+
     $('.writer_inc')._unormal({
         right: '100',
 //        bottom: '100'
     });
-    
+
     $('.box1_bt')._unormal({
         right: 100
     });
-    
-    $('.box2')._unormal({
-        bottom: 100
-    });
-    
-    
+
+    // $('.box2')._unormal({
+    //     bottom: 100
+    // });
+
+
+    // var s = $.sdGroup('master', {
+    //     time: 2000,
+    //     delay: 0,
+    //     ease: 'ease-back',//'ease-out',
+    //     css: {
+    //         width: '150',
+    //         height: '150',
+    //         'background-color': 'blue',
+    //         opacity: 1,
+    //         translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+    //         rotate: [.6, 1, .6, '80deg'],//
+    //         skew: [-15, -15],
+    //         scale: [2, 2],
+    //         origin: ['30', '30']
+    //     },
+    //     lazy: true,
+    //     repe: false,
+    // });
+    //
+    // $('.box2')._animation('master');
+
+
+   $(document)._on({
+       time: 2000,
+       delay: 0,
+       ease: 'ease-back',//'ease-out',
+       css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+           opacity: 1,
+           translate: ['200', 0],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '80deg'],//
+//            skew: [-15, -15],
+//            scale: [2, 2],
+//            origin: ['30', '30']
+       },
+       lazy: true,
+       repe: false,
+   }, '.box2');
+
+
 //    $('.box2')._animation({
 //       time: 2000,
 //        delay: 0,
 //        ease: 'ease-back',//'ease-out',
 //        css: {
-////            width: '150',
-////            height: '150',
-////            'background-color': 'blue',
+// //            width: '150',
+// //            height: '150',
+// //            'background-color': 'blue',
 //            opacity: 1,
 //            translate: ['200', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-////            rotate: [.6, 1, .6, '80deg'],//
-////            skew: [-15, -15],
-////            scale: [2, 2],
-////            origin: ['30', '30']
+// //            rotate: [.6, 1, .6, '80deg'],//
+// //            skew: [-15, -15],
+// //            scale: [2, 2],
+// //            origin: ['30', '30']
 //        },
 //        lazy: true,
 //        repe: false,
 //    });
-    
-    
-    
-    
+
+
+
+
 //    $('.box2')._animation({
 //        time: 1000,
 //        delay: 0,
@@ -112,7 +154,7 @@
 //        repe: false,
 //        normal: false
 //    });
-    
+
 //    $('.writer_inc')._animation({
 //        time: 1000,
 //        delay: 0,
@@ -125,6 +167,6 @@
 //        repe: false,
 //        normal: false
 //    });
-    
-    
+
+
 </script>

@@ -24,7 +24,7 @@ tool.initEase = function(data) {
 }
 
 tool.transition = function(ease, time, delay) {
-    var transition = 'all ' + (time/1000 || 1000) + 's ' + ease + ' ' + (delay/1000 || 0) + 's;';    
+    var transition = 'all ' + (time/1000 || 1000) + 's ' + ease + ' ' + (delay/1000 || 0) + 's;';
     transition = $.sdPrivateProperty('transition', transition);
     return transition;
 }
@@ -99,12 +99,12 @@ tool.rotate = function(data, type) {//旋转
 
 tool.skew = function(data, type) {//切面
     var skew = '',
-        x, y;  
-    
+        x, y;
+
     x = $.sdIsDEG(data[0] || '0px', type);
     y = $.sdIsDEG(data[1] || '0px', type);
     skew += 'skew(' + x + ', ' + y + ') ';
-    
+
 //    if(type) {
 //        x = $.sdIsDEG(data[0] || '0px', type);
 //        y = $.sdIsDEG(data[1] || '0px', type);
@@ -114,13 +114,13 @@ tool.skew = function(data, type) {//切面
 //        y = $.sdIsDEG(data[1] || '0px', type);
 //        skew += 'skew(' + x + ', ' + y + ') ';
 //    }
-    return skew;  
+    return skew;
 }
 
 tool.scale = function(data, type) {//比例
     var scale = '',
         x, y;
-    
+
     x = data[0];
     y = data[1];
     if(!type) {
@@ -128,11 +128,11 @@ tool.scale = function(data, type) {//比例
         y = (-1) * Number(y);
     }
     scale += 'scale(' + x + ', ' + y + ') ';
-    
-    
+
+
 //    x = data[0];
 //    y = data[1];
-//    
+//
 //    if(type) {
 //        scale += 'scale(' + x + ', ' + y + ') ';
 //    } else {
@@ -140,7 +140,7 @@ tool.scale = function(data, type) {//比例
 //    }
     return scale;
 },
-    
+
 tool.origin = function(data) {//支点
     var origin = '',
         x, y;
@@ -150,7 +150,7 @@ tool.origin = function(data) {//支点
     origin = $.sdPrivateProperty('transform-origin', origin);
     return origin;
 }
-    
+
 tool.animation = function(dom, options) {//*底层动画接口
     var ease = '',
         transition = '',
@@ -171,7 +171,7 @@ tool.animation = function(dom, options) {//*底层动画接口
                 str += 'display: inline-block;';
             }
             dom.attr('style', str);//设置transition
-            
+
             setTimeout(function() {//设置基本css属性
                 dom.css(css);
             }, 60/1000);
@@ -230,20 +230,39 @@ tool.onAnimation = function(dom, options) {
     }
 }
 
-lazy.scrollDetection = function(dom) {//筛选dom
+// ----------------------------------------------------------------------
+
+lazy.scrollDetection = function(dom) {//筛选将要进入视口的dom
     var viewH = $(window).height(),
         viewT = $(window).scrollTop(),
         clienH = dom.height(),
         clienW = dom.width(),
         clienT = dom.scrollTop() || dom[0].offsetTop,
         clienL = dom.scrollLeft() || dom[0].offsetLeft;
-    if((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {//在视口中
+        console.log(dom);
+        // console.log(viewH, viewT, clienT);
+        console.log((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0);
+    if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {//在视口中
         return true;
     }
     return false;
 }
 
-lazy.domsContainer = function(doms, options) {//筛选子dom
+lazy.parentContainer = function() {//筛选父容器,又符合条件的,查找子DOM
+    //容器配置
+    var data = $.sdData.lazyOn,
+        options;
+    for(var i = 0; i < data.length; i++) {
+        var _data = data[i];
+        var _dom = _data.bindDom;
+        if(lazy.scrollDetection(_dom)) {
+            options = $.sdData.lazyOptions[_data.ouid];
+            lazy.childrenContainer(_data.doms, options);
+        }
+    }
+}
+
+lazy.childrenContainer = function(doms, options) {//筛选子dom
     var i,
         length = doms.length;
     for(i = 0; i < length; i++) {
@@ -253,45 +272,33 @@ lazy.domsContainer = function(doms, options) {//筛选子dom
                 tool.animation(doms[i].dom, options);
                 if(!options.repe) {//没有重复
                     doms.splice(i, 1);
-                    lazy.domsContainer(doms, options);
+                    lazy.childrenContainer(doms, options);
                 }
             }
         }
     }
 }
 
-lazy.container = function() {//筛选容器
-    //容器配置
-    var data = $.sdData.lazyOn,
-        options;
-    for(var i = 0; i < data.length; i++) {
-        var _data = data[i];
-        var _dom = _data.bindDom;
-        if(lazy.scrollDetection(_dom)) {
-            options = $.sdData.lazyOptions[_data.ouid];
-            lazy.domsContainer(_data.doms, options);
-        }
-    }
-}
+
 
 lazy.pack = function() {
     lazy.lazy();
     tool.detection();
-    lazy.container();
+    lazy.parentContainer();
 }
 
 lazy.scroll = function() {//监控
     var data = $.sdData.lazyOn,
         timestamp;
-    lazy.pack();
+        lazy.pack();
     $(window).on('scroll', function() {
-        var data = $.sdData.lazyOn,
+        var data = $.sdData.lazyOn,//可能没有数据
             timestamp;
         timestamp = (new Date).getTime();
-        if( timestamp - data.timestamp > 300 ) {
+        // if( timestamp - data.timestamp > 300 ) {
             $.sdData.lazyOn.timestamp = timestamp;
             lazy.pack();
-        }
+        // }
     });
 }
 
@@ -306,7 +313,7 @@ lazy.register = function(dom, ouid) {//注册：1.对象
 }
 
 lazy.lazy = function() {//懒加载
-    var 
+    var
     viewH = $(window).height(),
     viewT = $(window).scrollTop(),
     lazy,
@@ -316,7 +323,7 @@ lazy.lazy = function() {//懒加载
     clienL,
     obj,
     dom,
-    options;    
+    options;
     for(uuid in $.sdData.lazy) {
         obj = $.sdData.lazy[uuid];
         dom = obj.dom;
@@ -328,7 +335,7 @@ lazy.lazy = function() {//懒加载
             if(( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 )) {//在视口中
                 obj.view = true;
             } else {//不在视口
-                obj.view = false;        
+                obj.view = false;
             }
         } else {//不在视口中
             if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {
@@ -388,11 +395,10 @@ tool.detection = function() {//监控
     for(k = 0; k < length; k++) {//监控对象
         obj = $.sdData.lazyOn[k];
         c_thisDom = $.extend({}, obj.thisDom);
-        c_thisDomLength = c_thisDom.length;        
+        c_thisDomLength = c_thisDom.length;
         h_thisDom = $(obj.bindDom).find(obj.query);
         doms = obj.doms;
         options = $.sdData.lazyOptions[obj.ouid];
-        console.log(options);
         h_length = $(obj.bindDom).find(obj.query).length;
         for(j = 0; j <h_length; j++) {//html中DOM长度
             tag = 0;//0 - 找不到， 1 - 找到
@@ -412,7 +418,7 @@ tool.detection = function() {//监控
                 doms = tool.doms(h_thisDom.eq(j), options, doms, doms.length);
             }
         }
-        obj.thisDom = h_thisDom;        
+        obj.thisDom = h_thisDom;
         console.log($.sdData.lazyOn);
     }
 }
@@ -434,7 +440,6 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
         arr = [],
         data = $.sdData.lazyOn,
         options = $.sdData.lazyOptions[ouid];
-    
     if(!!length) {//防止重复绑定
         for(var i = 0; i < length; i++ ) {
             if(elem.is(data[i].bindDom)) {
@@ -442,7 +447,6 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
             }
         }
     }
-    
     for(;findLength--;) {
         arr = tool.doms(thisDom.eq(findLength), options, arr);
     }
@@ -457,6 +461,7 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
     data.timestamp = (new Date).getTime();
     data.tag = 1;
     $.sdData.lazyOn = data;
+    lazy.scroll();
     console.log($.sdData.lazyOn);
 }
 
@@ -469,7 +474,6 @@ $.fn.extend({
             lazy.animation(this, group);//(elem, options)
         }
     },
-        
     _unormal: function(options) {
         var horizontal = options.right || options.left * (-1),
             vertical = options.bottom || options.top * (-1);
@@ -487,7 +491,7 @@ $.fn.extend({
         };
         this._animation(options);
     },
-    
+
     _normal: function(options) {
         var horizontal = options.right || options.left * (-1),
             vertical = options.bottom || options.top * (-1);
@@ -505,7 +509,7 @@ $.fn.extend({
         };
         this._animation(options);
     },
-    
+
     _on: function(group, query) {
         var length = arguments.length;
         if(!!length) {
@@ -552,7 +556,7 @@ $.extend({
                 return Number(data) + 'deg';
             }
             else {
-                return (Number(data) + 180) + 'deg';   
+                return (Number(data) + 180) + 'deg';
             }
         }
         return data;
