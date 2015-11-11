@@ -170,33 +170,33 @@ tool.animation = function(dom, options) {//*底层动画接口
     }
 }
 
-tool.onAnimation = function(dom, options) {
-    var ease = '',
-        transition = '',
-        transform = '',
-        origin = '',
-        css = options.css,
-        str;
-    if(!!options) {
-        ease = this.initEase(options.ease);
-        transition = this.transition(ease, options.time, options.delay);
-        transform = this.transform(css);
-        str = transition + dom.attr('style') + ';';
-        if($.sdIsBlock(dom)) {
-            str += 'display: block;';
-        }
-        else {
-            str += 'display: inline-block;';
-        }
-        dom.attr('style', str);//设置transition
-        setTimeout(function() {//设置基本css属性
-            dom.css(css);
-        }, 60/1000);
-        setTimeout(function() {//设置transform属性
-            dom.attr('style', dom.attr('style') + transform);
-        }, 60/1000);
-    }
-}
+//tool.onAnimation = function(dom, options) {//使用:tool.animation
+//    var ease = '',
+//        transition = '',
+//        transform = '',
+//        origin = '',
+//        css = options.css,
+//        str;
+//    if(!!options) {
+//        ease = this.initEase(options.ease);
+//        transition = this.transition(ease, options.time, options.delay);
+//        transform = this.transform(css);
+//        str = transition + dom.attr('style') + ';';
+//        if($.sdIsBlock(dom)) {
+//            str += 'display: block;';
+//        }
+//        else {
+//            str += 'display: inline-block;';
+//        }
+//        dom.attr('style', str);//设置transition
+//        setTimeout(function() {//设置基本css属性
+//            dom.css(css);
+//        }, 60/1000);
+//        setTimeout(function() {//设置transform属性
+//            dom.attr('style', dom.attr('style') + transform);
+//        }, 60/1000);
+//    }
+//}
 
 // ----------------------------------------------------------------------
 
@@ -218,35 +218,43 @@ lazy.scrollDetection = function(dom) {//筛选将要进入视口的dom
 lazy.parentContainer = function() {//筛选父容器,又符合条件的,查找子DOM
     //容器配置
     var data = $.sdData.lazyOn,
-        options;
-    for(var i = 0; i < data.length; i++) {
+        dtlength = data.length,
+        options,
+        qlength;
+    for(var i = 0; i < dtlength; i++) {//遍历父容器
         var _data = data[i];
         var _dom = _data.bindDom;
-        if(lazy.scrollDetection(_dom)) {
-            options = $.sdData.lazyOptions[_data.ouid];
-            lazy.childrenContainer(_data.doms, options);
-        }
-    }
-}
-
-lazy.childrenContainer = function(doms, options) {//筛选子dom
-    var i,
-        length = doms.length;
-    for(i = 0; i < length; i++) {
-        if(doms[i]) {
-            if(lazy.scrollDetection(doms[i].dom)) {
-//                tool.onAnimation(doms[i].dom, options);
-                tool.animation(doms[i].dom, options);
-                if(!options.repe) {//没有重复
-                    doms.splice(i, 1);
-                    lazy.childrenContainer(doms, options);
+        qlength = _data.query.length;
+        for(;qlength--;) {//遍历个子dom
+            options = $.sdData.lazyOptions[_data.ouid[qlength]];
+            if(_dom.is($(document))) {//父容器为document
+                console.log('父容器');
+                lazy.childrenContainer(_data.rgDom[qlength], options);
+            } else {
+                if(lazy.scrollDetection(_dom)) {//检测容器是否在视口
+                    lazy.childrenContainer(_data.rgDom[qlength], options);
                 }
             }
         }
     }
 }
 
-
+lazy.childrenContainer = function(rgDom, options) {//筛选子dom
+    var i,
+        length = rgDom.length;
+    for(i = 0; i < length; i++) {
+        if(rgDom[i]) {
+            if(lazy.scrollDetection(rgDom[i].dom)) {
+//                tool.onAnimation(rgDom[i].dom, options);
+                tool.animation(rgDom[i].dom, options);
+                if(!options.repe) {//没有重复
+                    rgDom.splice(i, 1);
+                    lazy.childrenContainer(rgDom, options);
+                }
+            }
+        }
+    }
+}
 
 lazy.pack = function() {
     lazy.lazy();
@@ -352,52 +360,90 @@ lazy.animation = function(dom, options, ouid) {//过滤lazy
     }
 }
 
-tool.detection = function() {//监控
+tool.detection = function() {//监控DOM,动态注册DOM
     var i,
         j,
         k,
+        qlength,//子dom长度
+        ouid,//
+        query,//对象查询名称
         tag,
         options,
         data = $.sdData.lazyOn,
         length = data.length,
         h_length,
         obj,//容器对象指针
-        doms,//doms对象指针
-        c_thisDom = {},//thisDom副本
-        c_thisDomLength,
-        h_thisDom;
-    for(k = 0; k < length; k++) {//监控对象
+        rgDom,//rgDom对象指针
+        c_saveDomList = {},//saveDom副本
+        c_saveDomListLength,
+        h_saveDom;
+    for(k = 0; k < length; k++) {//监控父容器
         obj = $.sdData.lazyOn[k];
-        c_thisDom = $.extend({}, obj.thisDom);
-        c_thisDomLength = c_thisDom.length;
-        h_thisDom = $(obj.bindDom).find(obj.query);
-        doms = obj.doms;
-        options = $.sdData.lazyOptions[obj.ouid];
-        h_length = $(obj.bindDom).find(obj.query).length;
-        for(j = 0; j <h_length; j++) {//html中DOM长度
-            tag = 0;//0 - 找不到， 1 - 找到
-            for(i = 0; i < c_thisDomLength; i++) {//存储长度
-                if(c_thisDom[i]) {
-                    if(c_thisDom.eq(i).is(h_thisDom.eq(j))) {//找到了dom
-                        tag = 1;
-                        delete c_thisDom[i];
-                        break;
-                    }
-                    else {//找不到dom
-                        tag = 0;
+        console.log(obj.query.length);
+        qlength = obj.query.length;//子dom对象
+        for(;qlength--;) {
+            query = obj.query[qlength];
+            ouid = obj.ouid[qlength];
+            c_saveDomList = $.extend({}, obj.saveDom);//保存的dom列表
+            //c_saveDomList = obj.saveDom;
+            c_saveDom = c_saveDomList[qlength];//保存的dom
+            c_saveDomLength = c_saveDom.length;//保存的dom长度
+            h_saveDom = $(obj.bindDom).find(query);//页面dom列表
+            rgDom = obj.rgDom;
+            options = $.sdData.lazyOptions[ouid];
+            h_length = $(obj.bindDom).find(query).length;
+            for(j = 0; j <h_length; j++) {//html中DOM长度
+                tag = 0;//0 - 找不到， 1 - 找到
+                for(i = 0; i < c_saveDomLength; i++) {//存储长度
+                    var cdom = c_saveDomList[qlength];//分组dom容器
+                    if(cdom[i]) {//确保有dom
+                        if(cdom.eq(i).is(h_saveDom.eq(j))) {//找到了dom
+                            tag = 1;
+                            delete cdom[i];
+                            break;
+                        }
+                        else {//找不到dom
+                            tag = 0;
+                        }
                     }
                 }
+                if(tag === 0) {
+                    rgDom = tool.rgDom(h_saveDom.eq(j), options, rgDom, rgDom.length);
+                }
             }
-            if(tag === 0) {
-                doms = tool.doms(h_thisDom.eq(j), options, doms, doms.length);
-            }
+            obj.saveDom = h_saveDom;
+            console.log($.sdData.lazyOn);
         }
-        obj.thisDom = h_thisDom;
-        console.log($.sdData.lazyOn);
+
+        //c_saveDomList = $.extend({}, obj.saveDom);//被保存的dom
+        //c_saveDomListLength = c_saveDomList.length;//[copy]被保存的dom长度
+        //h_saveDom = $(obj.bindDom).find(obj.query);//页面dom
+        //rgDom = obj.rgDom;
+        //options = $.sdData.lazyOptions[obj.ouid];
+        //h_length = $(obj.bindDom).find(obj.query).length;
+        //for(j = 0; j <h_length; j++) {//html中DOM长度
+        //    tag = 0;//0 - 找不到， 1 - 找到
+        //    for(i = 0; i < c_saveDomListLength; i++) {//存储长度
+        //        if(c_saveDomList[i]) {//确保有dom
+        //            if(c_saveDomList.eq(i).is(h_saveDom.eq(j))) {//找到了dom
+        //                tag = 1;
+        //                delete c_saveDomList[i];
+        //                break;
+        //            }
+        //            else {//找不到dom
+        //                tag = 0;
+        //            }
+        //        }
+        //    }
+        //    if(tag === 0) {
+        //        rgDom = tool.rgDom(h_saveDom.eq(j), options, rgDom, rgDom.length);
+        //    }
+        //}
+
     }
 }
 
-tool.doms = function(elem, options, arr, num) {//初始化doms格式
+tool.rgDom = function(elem, options, arr, num) {//初始化rgDom格式
     arr[arr.length] = {
         dom: elem,
         css: elem.attr('style'),
@@ -409,34 +455,60 @@ tool.doms = function(elem, options, arr, num) {//初始化doms格式
 
 tool.on = function(elem, query, ouid) {//底层绑定接口
     var length = $.sdData.lazyOn.length || 0,
-        thisDom = elem.find(query),
-        findLength = thisDom.length,//子元素长度
+        saveDom = elem.find(query),
+        findLength = saveDom.length,//子元素长度
         arr = [],
         data = $.sdData.lazyOn,
-        options = $.sdData.lazyOptions[ouid];
-    if(!!length) {//防止重复绑定
-        for(var i = 0; i < length; i++ ) {
-            if(elem.is(data[i].bindDom)) {
-                return;
+        options = $.sdData.lazyOptions[ouid],
+        i = 0,
+        tag = 0;//0 - 没有找到, 1 - 找到
+        //rgdom = {};
+    for(;findLength--;) {//
+        arr = tool.rgDom(saveDom.eq(findLength), options, arr);
+    }
+    if(!!length) {//已有dom集
+        for(i = 0; i < length; i++ ) {
+            if(elem.is(data[i].bindDom)) {//父容器绑定多个子容器
+                tag = 1;
+                break;
             }
         }
+        if(tag === 0) {//不存在父dom
+            data[length] = {
+                bindDom: elem,//作用: 从父容器为组,分离查找
+                saveDom: [elem.find(query)],//作用: 绑定总dom
+                query: [query],//作用: 用于查找dom
+                ouid: [ouid],//作用: 用于查找options
+                rgDom: [arr]//作用: 被注册dom
+            };
+            data.length = length + 1;
+            data.timestamp = (new Date).getTime();
+            data.tag = 1;
+        } else {//已有父dom
+
+            console.log(elem.find(query));
+
+            data[i].saveDom.push(elem.find(query));
+            data[i].query.push(query);
+            data[i].ouid.push(ouid);
+            data[i].rgDom.push(arr);
+        }
     }
-    for(;findLength--;) {
-        arr = tool.doms(thisDom.eq(findLength), options, arr);
+    else {//空dom集
+        console.log(elem.find(query));
+        data[length] = {
+            bindDom: elem,//作用: 从父容器为组,分离查找
+            saveDom: [elem.find(query)],//作用: 绑定总dom
+            query: [query],//作用: 用于查找dom
+            ouid: [ouid],//作用: 用于查找options
+            rgDom: [arr]//作用: 被注册dom
+        };
+        data.length = length + 1;
+        data.timestamp = (new Date).getTime();
+        data.tag = 1;
     }
-    data[length] = {
-        bindDom: elem,
-        thisDom: elem.find(query),
-        query: query,
-        ouid: ouid,
-        doms: arr
-    };
-    data.length = length + 1;
-    data.timestamp = (new Date).getTime();
-    data.tag = 1;
-    $.sdData.lazyOn = data;
+    console.log($.sdData.lazyOn);
     lazy.scroll();
-//    console.log($.sdData.lazyOn);
 }
 
 $.fn.extend({
