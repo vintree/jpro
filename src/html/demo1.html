@@ -48,7 +48,7 @@
                     </ol>
                 </div>
             </div>
-            
+
             <div class="box2_editor">
                 <h1>优秀编辑器</h1>
                 <div class="editor_box">
@@ -74,11 +74,11 @@
                     </div>
                 </div>
             </div>
-            
+
             <footer class="footer_box">
                 <div class="footer_container">
-                    <div style="float: left">工作单位: 搜狐视频</div>
-                    <div style="float: right">作者: 五谷子 / wuguzix@foxmail.com</div>
+                    <div class="inc" style="float: left; opacity: 0">工作单位: 搜狐视频</div>
+                    <div class="myinfo" style="float: right; opacity: 0">作者: 五谷子 / wuguzix@foxmail.com</div>
                 </div>
             </footer>
         </div>
@@ -127,7 +127,26 @@
     // $('.box2')._animation('master');
 
 
-   $('.box2')._on({
+//    $('.box2')._on({//描述
+//        time: 1000,
+//        delay: 0,
+//        ease: 'ease-out',//'ease-out',
+//        css: {
+// //            width: '150',
+// //            height: '150',
+// //            'background-color': 'blue',
+//            opacity: 1,
+//            translate: ['0', 100],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+// //            rotate: [.6, 1, .6, '80deg'],//
+// //            skew: [-15, -15],
+// //            scale: [2, 2],
+// //            origin: ['30', '30']
+//        },
+//        lazy: true,
+//        repe: false,
+//    }, '.box2_container');
+
+   $('.box2_container')._animation({
        time: 1000,
        delay: 0,
        ease: 'ease-out',//'ease-out',
@@ -144,7 +163,88 @@
        },
        lazy: true,
        repe: false,
-   }, '.box2_container');
+   });
+
+   $('.editor_logo')._animation({
+       time: 1000,
+       delay: 0,
+       ease: 'ease-out',//'ease-out',
+       css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+           opacity: 1,
+        //    translate: ['0', 100],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+           rotate: [.6, 1, .6, '180deg'],//
+        //    skew: [-5, -5],
+        //    scale: [2, 0],
+//            origin: ['30', '30']
+       },
+       lazy: true,
+       repe: false,
+       normal: false
+   });
+
+   $('.inc')._animation({
+       time: 1000,
+       delay: 0,
+       ease: 'ease-out',//'ease-out',
+       css: {
+//            width: '150',
+//            height: '150',
+//            'background-color': 'blue',
+           opacity: 1,
+        //    translate: ['0', 100],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+           rotate: [.6, 1, .6, '180deg'],//
+        //    skew: [-5, -5],
+        //    scale: [2, 0],
+//            origin: ['30', '30']
+       },
+       lazy: true,
+       repe: false,
+       normal: false
+   });
+
+   $('.myinfo')._animation({
+       time: 1000,
+       delay: 0,
+       ease: 'ease-out',//'ease-out',
+       css: {
+   //            width: '150',
+   //            height: '150',
+   //            'background-color': 'blue',
+           opacity: 1,
+        //    translate: ['0', 100],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+           rotate: [.6, 1, .6, '180deg'],//
+        //    skew: [-5, -5],
+        //    scale: [2, 0],
+   //            origin: ['30', '30']
+       },
+       lazy: true,
+       repe: false,
+       normal: false
+   });
+
+
+//    $('.editor_box')._on({//图片
+//        time: 1000,
+//        delay: 0,
+//        ease: 'ease-out',//'ease-out',
+//        css: {
+// //            width: '150',
+// //            height: '150',
+// //            'background-color': 'blue',
+//            opacity: 1,
+//         //    translate: ['0', 100],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+//            rotate: [.6, 1, .6, '180deg'],//
+//         //    skew: [-5, -5],
+//         //    scale: [2, 0],
+// //            origin: ['30', '30']
+//        },
+//        lazy: true,
+//        repe: false,
+//        normal: false
+//    }, '.editor_logo');
 
 
 //    $('.box2')._animation({

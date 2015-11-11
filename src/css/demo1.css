@@ -29,7 +29,7 @@ b {
     width: 100%;
     height: 100%;
     background: linear-gradient(rgba(0,0,0,0) 0%, rgba(1,1,1,1) 100%);
-    
+
 }
 
 .box1-img {
@@ -120,7 +120,6 @@ b {
 .box2 {
     width: 1024px;
     margin: 40px auto;
-    
 }
 
 .box2_describe {
@@ -172,6 +171,7 @@ b {
 }
 
 .editor_logo {
+    opacity: 0;
     height: 120px;
 }
 
