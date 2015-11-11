@@ -2,6 +2,8 @@
 ####   「更名」jpro bate1.0 (2015年11月9日) ####
 jpro 由 amazing 和 lazing项目合并而来.
 
+目前发布在lazing项目中,后续将移至jpro项目中
+
 ####   「新增」monkey内核   ####
 lazing是在jQuery的animation上进行了一层封装,同时进行了几次升级,在V2版效果达到预期,但在与amazing合并时遇到了性能和当初设计的扩展性等问题,所以放弃了animation作为jpro的底层动画引擎,重新写了一套动画引擎叫:monkey.
 
