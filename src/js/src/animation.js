@@ -289,6 +289,7 @@ lazy.register = function(dom, ouid) {//注册：1.对象
 lazy.lazy = function() {//懒加载
     var
     viewH = window.innerHeight,
+    viewT = $(window).scrollTop(),
     lazy,
     clienH,
     clienW,
@@ -447,7 +448,7 @@ $.fn.extend({
             lazy.animation(this, group);//(elem, options)
         }
     },
-    
+
     _on: function(group, query) {
         var length = arguments.length;
         if(!!length) {
@@ -456,7 +457,7 @@ $.fn.extend({
             tool.on(this, query, group, true);
         }
     },
-    
+
     _unormal: function(options) {
         var horizontal = options.right || options.left * (-1),
             vertical = options.bottom || options.top * (-1);
@@ -493,7 +494,7 @@ $.fn.extend({
         this._animation(options);
     },
 
-    
+
 });
 
 $.extend({
