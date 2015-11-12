@@ -203,11 +203,11 @@ tool.animation = function(dom, options) {//*底层动画接口
 lazy.scrollDetection = function(dom) {//筛选将要进入视口的dom
     var viewH = window.innerHeight,
         viewT = $(window).scrollTop(),
-        clienH = dom.height(),
-        clienW = dom.width(),
-        clienT = dom.scrollTop() || dom[0].offsetTop,
-        clienL = dom.scrollLeft() || dom[0].offsetLeft;
-         console.log(viewH, viewT, clienT);
+        //clienH = dom.height(),
+        //clienW = dom.width(),
+        clienT = dom.scrollTop() || dom[0].offsetTop;
+        //clienL = dom.scrollLeft() || dom[0].offsetLeft;
+         //console.log(viewH, viewT, clienT);
 //        console.log((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0);
     if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {//在视口中
         return true;
@@ -228,7 +228,7 @@ lazy.parentContainer = function() {//筛选父容器,又符合条件的,查找�
         for(;qlength--;) {//遍历个子dom
             options = $.sdData.lazyOptions[_data.ouid[qlength]];
             if(_dom.is($(document))) {//父容器为document
-                console.log('document容器');
+                //console.log('document容器');
                 lazy.childrenContainer(_data.rgDom[qlength], options);
             } else {
                 if(lazy.scrollDetection(_dom)) {//检测容器是否在视口
@@ -385,7 +385,7 @@ tool.detection = function() {//监控DOM,动态注册DOM
 
     for(k = 0; k < length; k++) {//监控父容器
         dataunit = $.sdData.lazyOn[k];
-        console.log(dataunit.query.length);
+        //console.log(dataunit.query.length);
         qlength = dataunit.query.length;//子dom对象
         for(;qlength--;) {//组内查询
             query = dataunit.query[qlength];
@@ -395,10 +395,10 @@ tool.detection = function() {//监控DOM,动态注册DOM
             bindDom = dataunit.bindDom;
             options = $.sdData.lazyOptions[ouid];
 
-            console.log(dataunit);
+            //console.log(dataunit);
 
             c_saveDom = saveDom;//copy - >保存的dom
-            console.log(c_saveDom);
+            //console.log(c_saveDom);
             c_saveDomLength = c_saveDom.length;//保存的dom长度
 
             h_saveDom = $(bindDom).find(query);//页面dom列表
@@ -412,9 +412,9 @@ tool.detection = function() {//监控DOM,动态注册DOM
                     //var cdom = c_saveDomList[c_saveDomLength];//分组dom容器
                     if(c_saveDom[i]) {//确保有dom
 
-                        console.log($(c_saveDom[i]));
-                        console.log(h_saveDom.eq(j));
-                        console.log($(c_saveDom[i]).is(h_saveDom.eq(j)));
+                        //console.log($(c_saveDom[i]));
+                        //console.log(h_saveDom.eq(j));
+                        //console.log($(c_saveDom[i]).is(h_saveDom.eq(j)));
 
                         if($(c_saveDom[i]).is(h_saveDom.eq(j))) {//找到了dom
                             tag = 1;
@@ -423,7 +423,7 @@ tool.detection = function() {//监控DOM,动态注册DOM
                         }
                     }
                 }
-                console.log('isfund: '+tag);
+                //console.log('isfund: '+tag);
                 //console.log(c_saveDom);
                 if(tag === 0) {
                     console.log(options);
@@ -435,7 +435,7 @@ tool.detection = function() {//监控DOM,动态注册DOM
             }
             console.log($.sdData.lazyOn);
         }
-
+        console.log($.sdData.lazyOn);
         //c_saveDomList = $.extend({}, obj.saveDom);//被保存的dom
         //c_saveDomListLength = c_saveDomList.length;//[copy]被保存的dom长度
         //h_saveDom = $(obj.bindDom).find(obj.query);//页面dom
