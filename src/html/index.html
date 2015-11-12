@@ -58,7 +58,7 @@
         css: {
 //            width: '40',
 //            height: '20',
-            'background-color': 'blue',
+            'background-color': 'red',
             opacity: 1,
             translate: ['0', 300],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
 //            rotate: [.6, 1, .6, '80deg'],//
@@ -71,25 +71,45 @@
         normal: false//正常模式
     }, '.on');
 
-    $(document)._on({
-        time: 2000,
-        delay: 0,
-        ease: 'linear',//'ease-out',
-        css: {
-//            width: '40',
-//            height: '20',
-            'background-color': 'blue',
-            opacity: 1,
-            translate: ['300', 0],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
-//            rotate: [.6, 1, .6, '80deg'],//
-//            skew: [-15, -15],
-//            scale: [1.1, 1.1],
-            origin: ['30', '30']
-        },
-        lazy: true,
-        repe: false,
-        normal: false//正常模式
-    }, '._on');
+//    $(document)._on({
+//        time: 2000,
+//        delay: 0,
+//        ease: 'linear',//'ease-out',
+//        css: {
+////            width: '40',
+////            height: '20',
+//            'background-color': 'blue',
+//            opacity: 1,
+//            translate: ['0', 200],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+////            rotate: [.6, 1, .6, '80deg'],//
+////            skew: [-15, -15],
+////            scale: [1.1, 1.1],
+//            origin: ['30', '30']
+//        },
+//        lazy: true,
+//        repe: false,
+//        normal: false//正常模式
+//    }, '.on');
+
+//    $(document)._on({
+//        time: 2000,
+//        delay: 0,
+//        ease: 'linear',//'ease-out',
+//        css: {
+////            width: '40',
+////            height: '20',
+//            'background-color': 'blue',
+//            opacity: 1,
+//            translate: ['300', 0],//上下、左右、前后 || 不带单位默认为px  || TODO 一个参数时，不在3D属性
+////            rotate: [.6, 1, .6, '80deg'],//
+////            skew: [-15, -15],
+////            scale: [1.1, 1.1],
+//            origin: ['30', '30']
+//        },
+//        lazy: true,
+//        repe: false,
+//        normal: false//正常模式
+//    }, '._on');
 
     $('.detection').on('click', function() {
         $.sdDetection();

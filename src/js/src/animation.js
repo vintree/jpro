@@ -228,7 +228,7 @@ lazy.parentContainer = function() {//筛选父容器,又符合条件的,查找�
         for(;qlength--;) {//遍历个子dom
             options = $.sdData.lazyOptions[_data.ouid[qlength]];
             if(_dom.is($(document))) {//父容器为document
-                console.log('父容器');
+                console.log('document容器');
                 lazy.childrenContainer(_data.rgDom[qlength], options);
             } else {
                 if(lazy.scrollDetection(_dom)) {//检测容器是否在视口
@@ -324,9 +324,9 @@ lazy.lazy = function() {//懒加载
                 obj.view = true;
                 options = $.sdData.lazyOptions[obj.ouid];
                 tool.animation(dom, options);
-                if(!obj.repe) {//没有重复
-                    delete $.sdData.lazy[uuid];
-                }
+                //if(!obj.repe) {//没有重复
+                //    delete $.sdData.lazy[uuid];
+                //}
             }
         }
     }
@@ -367,51 +367,72 @@ tool.detection = function() {//监控DOM,动态注册DOM
         qlength,//子dom长度
         ouid,//
         query,//对象查询名称
+        bindDom,
+        saveDom,
+        c_saveDom,//saveDom对象
+        c_saveDomLength,//saveDom长度
         tag,
         options,
         data = $.sdData.lazyOn,
         length = data.length,
         h_length,
-        obj,//容器对象指针
+        dataunit,//容器对象指针
         rgDom,//rgDom对象指针
         c_saveDomList = {},//saveDom副本
         c_saveDomListLength,
         h_saveDom;
+
+
     for(k = 0; k < length; k++) {//监控父容器
-        obj = $.sdData.lazyOn[k];
-        console.log(obj.query.length);
-        qlength = obj.query.length;//子dom对象
-        for(;qlength--;) {
-            query = obj.query[qlength];
-            ouid = obj.ouid[qlength];
-            c_saveDomList = $.extend({}, obj.saveDom);//保存的dom列表
-            //c_saveDomList = obj.saveDom;
-            c_saveDom = c_saveDomList[qlength];//保存的dom
-            c_saveDomLength = c_saveDom.length;//保存的dom长度
-            h_saveDom = $(obj.bindDom).find(query);//页面dom列表
-            rgDom = obj.rgDom;
+        dataunit = $.sdData.lazyOn[k];
+        console.log(dataunit.query.length);
+        qlength = dataunit.query.length;//子dom对象
+        for(;qlength--;) {//组内查询
+            query = dataunit.query[qlength];
+            ouid = dataunit.ouid[qlength];
+            saveDom = dataunit.saveDom[qlength];
+            rgDom = dataunit.rgDom[qlength];
+            bindDom = dataunit.bindDom;
             options = $.sdData.lazyOptions[ouid];
-            h_length = $(obj.bindDom).find(query).length;
+
+            console.log(dataunit);
+
+            c_saveDom = saveDom;//copy - >保存的dom
+            console.log(c_saveDom);
+            c_saveDomLength = c_saveDom.length;//保存的dom长度
+
+            h_saveDom = $(bindDom).find(query);//页面dom列表
+            h_length = $(bindDom).find(query).length;
+
+
             for(j = 0; j <h_length; j++) {//html中DOM长度
                 tag = 0;//0 - 找不到， 1 - 找到
+
                 for(i = 0; i < c_saveDomLength; i++) {//存储长度
-                    var cdom = c_saveDomList[qlength];//分组dom容器
-                    if(cdom[i]) {//确保有dom
-                        if(cdom.eq(i).is(h_saveDom.eq(j))) {//找到了dom
+                    //var cdom = c_saveDomList[c_saveDomLength];//分组dom容器
+                    if(c_saveDom[i]) {//确保有dom
+
+                        console.log($(c_saveDom[i]));
+                        console.log(h_saveDom.eq(j));
+                        console.log($(c_saveDom[i]).is(h_saveDom.eq(j)));
+
+                        if($(c_saveDom[i]).is(h_saveDom.eq(j))) {//找到了dom
                             tag = 1;
-                            delete cdom[i];
+                            //c_saveDom.splice(i, 1);
                             break;
-                        }
-                        else {//找不到dom
-                            tag = 0;
                         }
                     }
                 }
+                console.log('isfund: '+tag);
+                //console.log(c_saveDom);
                 if(tag === 0) {
-                    rgDom = tool.rgDom(h_saveDom.eq(j), options, rgDom, rgDom.length);
+                    console.log(options);
+                    var rgDomUnit = tool.rgDom(h_saveDom.eq(j), options, []);//格式化数据
+                    console.log(rgDomUnit);
+                    rgDom.concat(rgDom);
+                    saveDom.push(h_saveDom[j]);
                 }
             }
-            obj.saveDom = h_saveDom;
             console.log($.sdData.lazyOn);
         }
 
@@ -443,12 +464,27 @@ tool.detection = function() {//监控DOM,动态注册DOM
     }
 }
 
-tool.rgDom = function(elem, options, arr, num) {//初始化rgDom格式
+tool.rgDom = function(elem, options, arr) {//初始化rgDom格式
+
+    //console.log(elem);
+    //console.log(options);
+    //console.log(arr);
+
     arr[arr.length] = {
         dom: elem,
         css: elem.attr('style'),
         repe: options.repe,
         view: options.view
+    }
+    return arr;
+}
+
+tool.arrDom = function(doms) {//将jqDOM对象转化为数组
+    var i = 0,
+        l = doms.length,
+        arr = [];
+    for(;i < l; i++) {
+        arr.push(doms[i]);
     }
     return arr;
 }
@@ -463,20 +499,22 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
         i = 0,
         tag = 0;//0 - 没有找到, 1 - 找到
         //rgdom = {};
+
     for(;findLength--;) {//
         arr = tool.rgDom(saveDom.eq(findLength), options, arr);
     }
-    if(!!length) {//已有dom集
+
+    if(!!length) {//已有父容器集
         for(i = 0; i < length; i++ ) {
-            if(elem.is(data[i].bindDom)) {//父容器绑定多个子容器
+            if(elem.is(data[i].bindDom)) {//父容器是否被注册过
                 tag = 1;
                 break;
             }
         }
-        if(tag === 0) {//不存在父dom
+        if(tag === 0) {//父容器未注册
             data[length] = {
                 bindDom: elem,//作用: 从父容器为组,分离查找
-                saveDom: [elem.find(query)],//作用: 绑定总dom
+                saveDom: [tool.arrDom(elem.find(query))],//作用: 绑定总dom
                 query: [query],//作用: 用于查找dom
                 ouid: [ouid],//作用: 用于查找options
                 rgDom: [arr]//作用: 被注册dom
@@ -484,21 +522,35 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
             data.length = length + 1;
             data.timestamp = (new Date).getTime();
             data.tag = 1;
-        } else {//已有父dom
-
-            console.log(elem.find(query));
-
-            data[i].saveDom.push(elem.find(query));
-            data[i].query.push(query);
-            data[i].ouid.push(ouid);
-            data[i].rgDom.push(arr);
+        } else {//父容器已注册
+            //console.log(elem.find(query));
+            var dquery = data[i].query;
+            var dlength = dquery.length;
+            var dtag = 0;
+            //var find = elem.find(query)
+            for(;dlength--;) {
+                if(dquery[dlength] === query) {//重复绑定子dom->将被覆盖
+                    data[i].saveDom[dlength] = tool.arrDom(elem.find(query));
+                    data[i].rgDom[dlength] = arr;
+                    data[i].ouid[dlength] = ouid;
+                    dtag = 1;
+                    break;
+                }
+            }
+            console.log(dtag);
+            if(dtag === 0) {//未重复绑定子dom
+                data[i].saveDom.push(tool.arrDom(elem.find(query)));
+                data[i].query.push(query);
+                data[i].ouid.push(ouid);
+                data[i].rgDom.push(arr);
+            }
         }
     }
-    else {//空dom集
-        console.log(elem.find(query));
+    else {//空父容器集
+        //console.log(elem.find(query));
         data[length] = {
             bindDom: elem,//作用: 从父容器为组,分离查找
-            saveDom: [elem.find(query)],//作用: 绑定总dom
+            saveDom: [tool.arrDom(elem.find(query))],//作用: 绑定总dom
             query: [query],//作用: 用于查找dom
             ouid: [ouid],//作用: 用于查找options
             rgDom: [arr]//作用: 被注册dom
@@ -644,7 +696,7 @@ $.extend({
                 $.sdData.lazyOptions[ouid] = options;
                 return ouid;
             }
-            else if(length === 2 && typeof group === 'string' && typeof options === 'object'){
+            else if(length === 2 && typeof group === 'string' && typeof options === 'object') {
                 $.sdData.lazyOptions[group] = options;
                 return group;
             }
