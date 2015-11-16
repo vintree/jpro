@@ -1,5 +1,40 @@
-#Lazing
-####   「更名」jpro bate1.0 (2015年11月9日) ####
+#Jpro「原lazing项目」
+
+####  「新」jpro bate1.1 (2015年11月16日) ####
+#####	「日志」 	#####
+*	优化底层引擎复用性
+*	更改内核策略
+*	更改内存回收策略
+*	修复部分bug
+
+#####	「API」 	#####
+「对象API」
+
+*	_on()	
+*	_animation()
+*	_unormal()
+*	_normal()
+
+「方法API」
+
+*	sdPrivateProperty()
+*	sdKernel()
+*	sdIsPX()
+*	sdIsDEG()
+*	sdIsBlock()
+*	sdUuid()
+*	sdGroup()
+*	sdCleanGroup()
+*	sdGetOption()	
+
+#####	「注意」 	#####
+*	API用法后续补充	
+*	测试版请勿使用到项目中，现阶段仅供学习参考，得到充分测试后发布正式版
+*	原版API对比参考Lazing V2版
+
+---------------------------------------------------------------------------------
+
+####  「新」jpro bate1.0 (2015年11月9日) ####
 jpro 由 amazing 和 lazing项目合并而来.
 
 目前发布在lazing项目中,后续将移至jpro项目中

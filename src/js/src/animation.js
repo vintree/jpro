@@ -170,43 +170,16 @@ tool.animation = function(dom, options) {//*底层动画接口
     }
 }
 
-//tool.onAnimation = function(dom, options) {//使用:tool.animation
-//    var ease = '',
-//        transition = '',
-//        transform = '',
-//        origin = '',
-//        css = options.css,
-//        str;
-//    if(!!options) {
-//        ease = this.initEase(options.ease);
-//        transition = this.transition(ease, options.time, options.delay);
-//        transform = this.transform(css);
-//        str = transition + dom.attr('style') + ';';
-//        if($.sdIsBlock(dom)) {
-//            str += 'display: block;';
-//        }
-//        else {
-//            str += 'display: inline-block;';
-//        }
-//        dom.attr('style', str);//设置transition
-//        setTimeout(function() {//设置基本css属性
-//            dom.css(css);
-//        }, 60/1000);
-//        setTimeout(function() {//设置transform属性
-//            dom.attr('style', dom.attr('style') + transform);
-//        }, 60/1000);
-//    }
-//}
-
 // ----------------------------------------------------------------------
 
 lazy.scrollDetection = function(dom) {//筛选将要进入视口的dom
     var viewH = window.innerHeight,
         viewT = $(window).scrollTop(),
         clienT = dom.scrollTop() || dom[0].offsetTop,
+        clienH = dom.height(),
         revise = 0;//校正参数
-//        console.log((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0);
-    if( (viewH + viewT - revise) - clienT > 0 && (viewH + viewT - revise) - clienT - viewH < 0 ) {//在视口中
+//  console.log((viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0);
+    if( (viewH + viewT - revise) - clienT > 0 && (viewH + viewT - revise) - (clienT + clienH) < 0 ) {//在视口中
         return true;
     }
     return false;
@@ -225,7 +198,6 @@ lazy.parentContainer = function() {//筛选父容器,又符合条件的,查找�
         for(;qlength--;) {//遍历个子dom
             options = $.sdData.lazyOptions[_data.ouid[qlength]];
             if(_dom.is($(document))) {//父容器为document
-                //console.log('document容器');
                 lazy.childrenContainer(_data.rgDom[qlength], options);
             } else {
                 if(lazy.scrollDetection(_dom)) {//检测容器是否在视口
@@ -242,7 +214,6 @@ lazy.childrenContainer = function(rgDom, options) {//筛选子dom
     for(i = 0; i < length; i++) {
         if(rgDom[i]) {
             if(lazy.scrollDetection(rgDom[i].dom)) {
-//                tool.onAnimation(rgDom[i].dom, options);
                 tool.animation(rgDom[i].dom, options);
                 if(!options.repe) {//没有重复
                     rgDom.splice(i, 1);
@@ -262,10 +233,8 @@ lazy.pack = function() {
 }
 
 lazy.scroll = function() {//监控
-    var data = $.sdData.lazyOn,
-        timestamp;
-        lazy.pack();
-    $(window).on('scroll', function() {
+    lazy.pack();
+    window.onscroll = function() {
         var data = $.sdData.lazyOn,//可能没有数据
             timestamp,
             viewT = $(window).scrollTop();
@@ -275,12 +244,12 @@ lazy.scroll = function() {//监控
             lazy.pack();
         }
         else {
-            if( timestamp - data.timestamp > 300 ) {
+            if( timestamp - data.timestamp > 0 ) {
                 $.sdData.lazyOn.timestamp = timestamp;
                 lazy.pack();
              }
         }
-    });
+    }
 }
 
 lazy.register = function(dom, ouid) {//注册：1.对象
@@ -294,9 +263,12 @@ lazy.register = function(dom, ouid) {//注册：1.对象
 }
 
 lazy.staticLazy = function() {
+    console.log($.sdData.lazy);
     for(uuid in $.sdData.lazy) {
         obj = $.sdData.lazy[uuid];
         dom = obj.dom;
+        //console.log(dom);
+        //console.log(dom.height());
         if(lazy.scrollDetection(dom)) {
             options = $.sdData.lazyOptions[obj.ouid];
             tool.animation(dom, options);
@@ -304,46 +276,6 @@ lazy.staticLazy = function() {
         }
     }
 }
-
-
-
-//lazy.lazy = function() {//懒加载
-//    var
-//    viewH = window.innerHeight,
-//    viewT = $(window).scrollTop(),
-//    lazy,
-//    clienH,
-//    clienW,
-//    clienT,
-//    clienL,
-//    obj,
-//    dom,
-//    options;
-//    for(uuid in $.sdData.lazy) {
-//        obj = $.sdData.lazy[uuid];
-//        dom = obj.dom;
-//        clienH = dom.height();
-//        clienW = dom.width();
-//        clienT = dom.scrollTop() || dom[0].offsetTop;
-//        clienL = dom.scrollLeft() || dom[0].offsetLeft;
-//        if(obj.view) {//在视口中
-//            if(( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 )) {//在视口中
-//                obj.view = true;
-//            } else {//不在视口
-//                obj.view = false;
-//            }
-//        } else {//不在视口中
-//            if( (viewH + viewT - 100) - clienT > 0 && (viewH + viewT - 100) - clienT - viewH < 0 ) {
-//                obj.view = true;
-//                options = $.sdData.lazyOptions[obj.ouid];
-//                tool.animation(dom, options);
-//                //if(!obj.repe) {//没有重复
-//                //    delete $.sdData.lazy[uuid];
-//                //}
-//            }
-//        }
-//    }
-//}
 
 lazy.config = function(dom, options, ouid) {//配置dom，options
     var length = dom.length;
@@ -528,6 +460,7 @@ tool.on = function(elem, query, ouid) {//底层绑定接口
 
 $.fn.extend({
     _animation: function(group) {//静态dom绑定[可延时]
+        $('body,html').animate({ scrollTop: 0 }, 10);
         var length = arguments.length;
         if(length === 1) {
             //options = group;
@@ -538,6 +471,7 @@ $.fn.extend({
     },
 
     _on: function(group, query, islz) {//动态dom绑定[可延时]
+        $('body,html').animate({ scrollTop: 0 }, 10);
         var length = arguments.length;
         if(!!length) {
             group = typeof group === 'object' ?  $.sdGroup(group) : group;
@@ -664,43 +598,19 @@ $.extend({
             }
         }
     },
-//    sdCleanGroup: function(group) {
-//        delete $.sdData.lazyOptions[group];
-//    },
-//    sdGetOption: function(group) {
-//        if(typeof group === 'string') {//group
-//            group = $.sdData.lazyOptions[group];
-//        }
-//        return group;
-//    },
-    sdDetection: function() {
-        tool.detection();
+    sdCleanGroup: function(group) {
+        delete $.sdData.lazyOptions[group];
     },
-    sdScroll: function() {
-        lazy.pack();
+    sdGetOption: function(group) {
+        if(typeof group === 'string') {//group
+            group = $.sdData.lazyOptions[group];
+        }
+        return group;
     }
-//    sdScroll: function() {
-//        var data = $.sdData.lazyOn,
-//            timestamp;
-//        timestamp = (new Date).getTime();
-//        if(data.tag === 1) {
-//            if( timestamp - data.timestamp > 1500 ) {
-//                tool.detection();
-//                lazy.lazy();
-//                $.sdData.lazyOn.timestamp = timestamp;
-//                $.sdData.lazyOn.tag = 2;
-//            }
-//        }
-//        else {
-//            console.log((new Date).getTime() - data.timestamp);
-//            if( (new Date).getTime() - data.timestamp > 750 ) {
-//                console.log('fsaf');
-//                tool.detection();
-//                lazy.lazy();
-//                console.log(data);
-//                $.sdData.lazyOn.timestamp = timestamp;
-//                $.sdData.lazyOn.tag = 1;
-//            }
-//        }
-//    }
+    //sdDetection: function() {
+    //    tool.detection();
+    //},
+    //sdScroll: function() {
+    //    lazy.pack();
+    //}
 });
