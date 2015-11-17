@@ -1,5 +1,8 @@
 #Jpro「原lazing项目」
 
+[点击进入GitHub](https://github.com/wuguzi/jpro)
+
+[点击进入「对象API」wiki](https://github.com/wuguzi/jpro/wiki/API)
 ####  「介绍」
 *	jpro是基于monkey引擎上的jQeury动画效果组件，jpro相比lazing性能上有了更大的提升；
 *	jpro与lazing相比，添加二度监控策略，对离视口较远的dom自动放弃监控，接近视口时开始监控，减少对main thred开销；
@@ -25,9 +28,7 @@ lazing是在jQuery的animation上进行了一层封装,同时进行了几次升�
 *	使用前先加载jQeury
 *	demo：src/html/demo1.html
 
-[点击进入GitHub](https://github.com/wuguzi/jpro)
 
-[点击进入「对象API」wiki](https://github.com/wuguzi/jpro/wiki/API)
 ####  「新」jpro bate1.1 (2015年11月17日) ####
 #####	「日志」 	#####
 *	优化底层引擎复用性
