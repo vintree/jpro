@@ -6,7 +6,7 @@
 *	压缩文件：dist/js/src/jpro.min.js
 *	源文件：dist/js/src/jpro.js
 *	使用前先加载jQeury
-*	
+*	「demo」src/html/demo1.html
 
 [点击进入「对象API」wiki](https://github.com/wuguzi/jpro/wiki/API)
 #####	「日志」 	#####
