@@ -8,7 +8,7 @@ jQuery.fn.cssAnimation = function(options) {
             'ease-out': 'ease-out',
             'ease-in': 'ease-in',
             'ease-in-out': 'ease-in-out',
-            'back': 'cubic-bezier(0.68, -0.55, 0.27, 1.55) '
+            'ease-back': 'cubic-bezier(0.68, -0.55, 0.27, 1.55) '
         },
         translate: function(data) {//位置移动
             var translate = '',
@@ -71,6 +71,7 @@ jQuery.fn.cssAnimation = function(options) {
             }
             transition = 'all ' + (data.time/1000 || 1000) + 's ' + timing + ' ' + (data.delay/1000 || 0) + 's;';
             transition = $.skyFun.privateProperty('transition', transition);
+            
             if(!!data.css.translate) {//位置
                 transform += this.translate(data.css.translate);
             }
@@ -96,7 +97,6 @@ jQuery.fn.cssAnimation = function(options) {
                 str += 'display: inline-block;';
             }
             Obj.attr('style', str);
-//            Obj.css(data.css);
             setTimeout(function() {
                 Obj.css(data.css);
             }, 1000/60);
@@ -119,14 +119,14 @@ jQuery.fn.cssAnimation = function(options) {
     cssAnimation.init(options);
 };
 
-$.extend($.skyFun, {
-    privateProperty: function(name, data) {//浏览器扩展名
+$.extend({
+    skyPrivateProperty: function(name, data) {//浏览器扩展名
         var extend = $.skyFun.kernel(),
             str = ''+ name +': ' + data,
             strKernel = extend + ''+ name +': ' + data;
         return strKernel + str;
     },
-    kernel: function() {//检测浏览器内核
+    skyKernel: function() {//检测浏览器内核
         var agent = navigator.userAgent.toLowerCase();
         if(agent.indexOf('webkit') >= 0) {
             return '-webkit-';
@@ -148,19 +148,19 @@ $.extend($.skyFun, {
         }
         return arr;
     },
-    isPX: function(data) {//检测px单位
+    skyIsPX: function(data) {//检测px单位
         if(!isNaN(data)) {//纯数字
             return data + 'px';
         }
         return data;
     },
-    isDEG: function(data) {//检测deg单位
+    skyIsDEG: function(data) {//检测deg单位
         if(!isNaN(data)) {
             return Number(data) + 'deg';
         }
         return data;
     },
-    isBlock: function(obj) {
+    skyIsBlock: function(obj) {
         var block = ['address', 'blockquote', 'center' ,'dir', 'div', 'dl', 'fieldset', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'hr', 'isindex', 'menu', 'noframes', 'ol', 'p', 'pre', 'table', 'ul'];
         block = block.join(',');
         if(block.indexOf(obj[0].tagName.toLowerCase()) >= 0) {

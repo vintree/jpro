@@ -1,6 +1,13 @@
 #Jpro「原lazing项目」
 
-####  「新」jpro bate1.1 (2015年11月16日) ####
+####  「新」jpro bate1.1 (2015年11月17日) ####
+说明：
+
+*	压缩文件：dist/js/src/jpro.min.js
+*	源文件：dist/js/src/jpro.js
+*	使用前先加载jQeury
+
+[点击进入「对象API」wiki](https://github.com/wuguzi/jpro/wiki/API)
 #####	「日志」 	#####
 *	优化底层引擎复用性
 *	更改内核策略
@@ -28,7 +35,6 @@
 *	sdGetOption()	
 
 #####	「注意」 	#####
-*	API用法后续补充	
 *	测试版请勿使用到项目中，现阶段仅供学习参考，得到充分测试后发布正式版
 *	原版API对比参考Lazing V2版
 
