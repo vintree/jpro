@@ -2,7 +2,7 @@
 
 ####  「介绍」
 *	jpro是基于monkey引擎上的jQeury动画效果组件，jpro相比lazing性能上有了更大的提升；
-*	jpro与lazing相比，二度监控策略，对离视口较远的dom自动放弃监控，接近视口时开始监控，减少对main thred开销；
+*	jpro与lazing相比，添加二度监控策略，对离视口较远的dom自动放弃监控，接近视口时开始监控，减少对main thred开销；
 *	更优秀的回收算法
 *	jpro添加了正常模式控制，自己设置开始/结束位置；
 
