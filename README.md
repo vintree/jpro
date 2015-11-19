@@ -3,6 +3,32 @@
 [点击进入GitHub](https://github.com/wuguzi/jpro)
 
 [点击进入「对象API」wiki](https://github.com/wuguzi/jpro/wiki/API)
+
+
+由于该项目暂未得到小组支持，缺少测试数据，不足以发放正式版，作者正在努力测试当中。
+
+当作者了解React时，意外发现[霹雳鱼](http://piliyu.com/)网站，jpro可完成该网站95%的效果，可以参考这份优秀的网站。
+
+
+送一份简答的伪码，看懂了就付出行动吧！(coding....
+
+```
+
+conts have= [openSource, strive, selfless];
+if(this.CodingPeasant) {
+	this.CodingPeasant.have = {
+		0: true,
+		1: true,
+		2: true,
+		....
+		length: have.length
+	}
+	console.log(have[n] == this.CodingPeasant.have[n]);
+	if(Math.floor(Math.random()*have.length)) {
+		console.log('You should click' + watch || star || fork);
+	}
+}
+```
 ####  「介绍」
 *	jpro是基于monkey引擎上的jQeury动画效果组件，jpro相比lazing性能上有了更大的提升；
 *	jpro与lazing相比，添加二度监控策略，对离视口较远的dom自动放弃监控，接近视口时开始监控，减少对main thred开销；
@@ -11,7 +37,7 @@
 
 
 ####   「引擎」monkey引擎   ####
-lazing是在jQuery的animation上进行了一层封装,同时进行了几次升级,在V2版效果达到预期,但在与amazing合并时遇到了性能和当初设计的扩展性等问题,所以放弃了animation作为jpro的底层动画引擎,重新写了一套动画引擎（monkey）。monkey是一个100%的css引擎，高度利用硬件加速功能。
+lazing是在jQuery的animation上进行了一层封装,同时进行了几次升级,在V2版效果达到预期,但在与amazing合并时遇到了性能和当初设计的扩展性等问题,所以放弃了animation作为jpro的底层动画引擎,重新写一套动画引擎（monkey）。monkey是一个100%的css引擎，高度利用硬件加速功能。
 
 ####   「目的」解决效果难题，把更多的精力放到业务上   ####
 *   让有技术支持的团队，更加快速搭建起「搜狐快站，易企秀」等第三方服务的效果，提供更底层支持
