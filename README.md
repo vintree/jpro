@@ -14,7 +14,7 @@
 
 ```
 
-conts have= [openSource, strive, selfless];
+conts have= [openSource, strive, selfless,..];
 if(this.CodingPeasant) {
 	this.CodingPeasant.have = {
 		0: true,
@@ -24,7 +24,7 @@ if(this.CodingPeasant) {
 		length: have.length
 	}
 	console.log(have[n] == this.CodingPeasant.have[n]);
-	if(Math.floor(Math.random()*have.length)) {
+	if(this.CodingPeasant.have[Math.floor(Math.random()*have.length)]) {
 		console.log('You should click' + watch || star || fork);
 	}
 }
