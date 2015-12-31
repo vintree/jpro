@@ -4,7 +4,7 @@
 
 [点击进入「对象API」wiki](https://github.com/wuguzi/jpro/wiki/API)
 
-Jpro 1.1 V （2015年12月31日）
+Jpro 1.2 V （2015年12月31日）
 
 [霹雳鱼](http://piliyu.com/)网站，jpro可完成该网站95%的效果，可以参考这份优秀的网站。
 
