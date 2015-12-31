@@ -4,37 +4,26 @@
 
 [点击进入「对象API」wiki](https://github.com/wuguzi/jpro/wiki/API)
 
+Jpro 1.1 V （2015年12月31日）
 
-由于该项目暂未得到小组支持，缺少测试数据，不足以发放正式版，作者正在努力测试当中。
+[霹雳鱼](http://piliyu.com/)网站，jpro可完成该网站95%的效果，可以参考这份优秀的网站。
 
-当作者了解React时，意外发现[霹雳鱼](http://piliyu.com/)网站，jpro可完成该网站95%的效果，可以参考这份优秀的网站。
+感谢 @搜狐视频 FE小伙伴 提出的宝贵意见。
+
+这也是2015年最后一个完成轮子。
+
+（EP：该项目与 @搜狐 无关，使用后果，作者概不负责）
 
 
-送一份简答的伪码，看懂了就付出行动吧！(coding....
+「安利一个新轮子」
 
-```
+ [iboostrap](https://github.com/wuguzi/ibootstrap) 专为webview项目准备的轮子，很快和大家见面。 
 
-conts have= [openSource, strive, selfless,..];
-if(this.CodingPeasant) {
-	this.CodingPeasant.have = {
-		0: true,
-		1: true,
-		2: true,
-		....
-		length: have.length
-	}
-	console.log(have[n] == this.CodingPeasant.have[n]);
-	if(this.CodingPeasant.have[Math.floor(Math.random()*have.length)]) {
-		console.log('You should click' + watch || star || fork);
-	}
-}
-```
 ####  「介绍」
 *	jpro是基于monkey引擎上的jQeury动画效果组件，jpro相比lazing性能上有了更大的提升；
 *	jpro与lazing相比，添加二度监控策略，对离视口较远的dom自动放弃监控，接近视口时开始监控，减少对main thred开销；
 *	更优秀的回收算法
 *	jpro添加了正常模式控制，自己设置开始/结束位置；
-
 
 ####   「引擎」monkey引擎   ####
 lazing是在jQuery的animation上进行了一层封装,同时进行了几次升级,在V2版效果达到预期,但在与amazing合并时遇到了性能和当初设计的扩展性等问题,所以放弃了animation作为jpro的底层动画引擎,重新写一套动画引擎（monkey）。monkey是一个100%的css引擎，高度利用硬件加速功能。
@@ -45,10 +34,9 @@ lazing是在jQuery的animation上进行了一层封装,同时进行了几次升�
 
 #####	「注意」 	#####
 *	原版API对比参考Lazing V2版
-	
+
 
 ####「说明」
-
 *	压缩文件：dist/js/src/jpro.min.js
 *	源文件：dist/js/src/jpro.js
 *	使用前先加载jQeury
@@ -65,7 +53,7 @@ lazing是在jQuery的animation上进行了一层封装,同时进行了几次升�
 #####	「API」 	#####
 「对象API」
 
-*	_on()	
+*	_on()
 *	_animation()
 *	_unormal()
 *	_normal()
@@ -80,7 +68,7 @@ lazing是在jQuery的animation上进行了一层封装,同时进行了几次升�
 *	sdUuid()
 *	sdGroup()
 *	sdCleanGroup()
-*	sdGetOption()	
+*	sdGetOption()
 
 
 ---------------------------------------------------------------------------------
@@ -117,7 +105,7 @@ Lazing迎来了第二个版本重大更新，核心算法重新设计，提高�
 *	不想配置？绑定DOM名字即可
 
 > **可自定义支持**
-> 
+>
 > - DOM对象定义(eq: .lazy || #lazy || body > .lazy || .. 等)
 > - 执行时间（ms）
 > - 延迟时间（未支持）
@@ -131,7 +119,7 @@ Lazing迎来了第二个版本重大更新，核心算法重新设计，提高�
 使用方法
 ====
 
-| arguments   | 作用  | 默认值 | 类型   | 
+| arguments   | 作用  | 默认值 | 类型   |
 | ------- | :----: | :---: | ---: |
 | name  |  支持jQueryDOM查询命名规则  | .lazy |  string    |
 | time   | 执行时间 | 1000   |  num  |
@@ -172,9 +160,9 @@ Lazing迎来了第二个版本重大更新，核心算法重新设计，提高�
 *	「新增」一个demo实例，可体现组件的强大！
 *	「更新」可设置初始化隐藏度和最后隐藏度（startOpacity，endOpacity）
 *	「更新」将DOM名称注册改为真实DOM对象注册
-*	
+*
 * 「bug 」修复多层容器加载时orien累加问题
-* 「bug 」修复例如一个class对应多个DOM，无法独立监控问题 
+* 「bug 」修复例如一个class对应多个DOM，无法独立监控问题
 
 
 2015年10月05日 v0.1
@@ -188,4 +176,3 @@ Lazing迎来了第二个版本重大更新，核心算法重新设计，提高�
 wuguzix@foxmail.com
 
 五谷子
-
