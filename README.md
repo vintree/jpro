@@ -10,8 +10,6 @@ Jpro 1.2 V （2015年12月31日）
 
 感谢 @搜狐视频 FE小伙伴 提出的宝贵意见。
 
-（EP：该项目与 @搜狐 无关，使用后果，作者概不负责）
-
 「安利一个新轮子」
 
  [iboostrap](https://github.com/wuguzi/ibootstrap) 专为webview项目准备的轮子，很快和大家见面。
